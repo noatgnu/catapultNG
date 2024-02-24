@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Analysis, AnalysisQuery, AnalysisType} from "./analysis";
+import { Task } from '../task/task';
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +42,16 @@ export class AnalysisService {
     return this.http.post<Analysis>(`${this.baseURL}/api/analyses`, {
       analysis_name:analysis_name, experiment: experiment, analysis_type: analysis_type, fasta_file: fasta_file, spectral_library: spectral_library},
       {observe: "body", responseType: "json"})
+  }
+
+  searchAnalyses(search: string): Observable<AnalysisQuery> {
+    const params: any = {
+      "search": search
+    }
+    return this.http.get<AnalysisQuery>(`${this.baseURL}/api/analyses`, {observe: "body", responseType: "json", params: params})
+  }
+
+  getAssociatedTasks(analysis_id: number): Observable<Task[]> {
+    return this.http.get<Task[]>(`${this.baseURL}/api/analyses/${analysis_id}/get_associated_tasks`, {observe: "body", responseType: "json"})
   }
 }

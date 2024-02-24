@@ -13,7 +13,7 @@
         <button class="btn btn-sm btn-dark" (click)="previousPage()" [disabled]="!previous"><</button>
         <button class="btn btn-sm btn-dark" (click)="nextPage()" [disabled]="!next">></button>
       </nav>
-
+      <app-analysis-search [mode]="'emit'" (searchQuery)="handleAnalysisSearchQuery($event)"></app-analysis-search>
       <div class="list-group d-flex flex-column rounded-0 overflow-auto">
         @for (e of analyses; track e) {
           <div [ngClass]="{'list-group-item list-group-item-action d-flex flex-row align-item-center g-2': true, 'bg-primary': e.id === clickedAnalysis, 'text-light': e.id === clickedAnalysis}" (click)="selectAnalysis(e.id)">
@@ -68,18 +68,80 @@
                 <input type="number" class="form-control" id="id" formControlName="id" readonly>
               </div>
             </div>
-            <div class="d-flex gap-2">
-              <div class="form-group">
-                <label for="created_at">Created At</label>
-                <input type="date" class="form-control" id="created_at" formControlName="created_at" readonly>
-              </div>
-              <div class="form-group">
-                <label for="updated_at">Updated At</label>
-                <input type="date" class="form-control" id="updated_at" formControlName="updated_at" readonly>
-              </div>
+
+            <div class="form-group">
+              <label for="fasta_file">Fasta File</label>
+              <input type="text" class="form-control" id="fasta_file" formControlName="fasta_file">
+            </div>
+            <div class="form-group">
+              <label for="spectral_library">Spectral Library</label>
+              <input type="text" class="form-control" id="spectral_library" formControlName="spectral_library">
+            </div>
+            <div class="form-group">
+              <b>Created At:</b> {{form.value.created_at}}
+            </div>
+            <div class="form-group">
+              <b>Updated At:</b> {{form.value.updated_at}}
             </div>
             <div class="d-flex gap-2">
+
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="processing" formControlName="processing">
+                <label class="form-check-label" for="processing">
+                  Processing
+                </label>
+                <small class="form-text text-muted">
+                  Indicate if the analysis is processing.
+                </small>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="completed" formControlName="completed">
+                <label class="form-check-label" for="completed">
+                  Completed
+                </label>
+                <small class="form-text text-muted">
+                  Indicate if the analysis is completed.
+                </small>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="default_analysis" formControlName="default_analysis">
+                <label class="form-check-label" for="default_analysis">
+                  Default Analysis
+                </label>
+                <small class="form-text text-muted">
+                  There should be only one default analysis per experiment and it will be used to automatically run analysis if the experiment have no analysis done yet.
+                </small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="commands">Command Parameters</label>
+              <textarea class="form-control" id="commands" formControlName="commands"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="output_folder">Output Folder</label>
+              <input type="text" class="form-control" id="output_folder" formControlName="output_folder">
+            </div>
+            <div class="form-group">
+              <b>Start Time:</b> {{form.value.start_time}}
+            </div>
+            <div class="form-group">
+              <b>End Time:</b> {{form.value.end_time}}
+            </div>
+            @if (selectedExperiment) {
+              @if (!editExperiment) {
+                <div class="form-group">
+                  <label><b>Experiment</b></label>
+                  <p>{{selectedExperiment.experiment_name}}</p>
+                  <button class="btn btn-sm btn-outline-danger" (click)="editExperiment=true">Change Experiment</button>
+                </div>
+              } @else {
+                <app-experiment-search [mode]="'typeahead'" (selectedExperiment)="handleExperimentSelect($event)" [experiment]="selectedExperiment"></app-experiment-search>
+              }
+            }
+
+            <div class="d-flex gap-2">
               <button class="btn btn-primary" (click)="updateAnalysis()">Update</button>
+              <button class="btn btn-primary">Queue Analysis</button>
               <button class="btn btn-danger" (click)="deleteAnalysis(clickedAnalysis)">Delete</button>
             </div>
           </form>
@@ -87,6 +149,24 @@
 
       }
 
+    </div>
+    <div class="border-start border-1 d-flex flex-column border-black h-100" style="width: 300px; min-width: 300px">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex flex-wrap text-light">
+        <div class="container-fluid">
+          <div class="navbar-brand">Associated Tasks</div>
+        </div>
+      </nav>
+      <div class="list-group d-flex flex-column rounded-0 overflow-auto">
+        @for (t of tasks; track t) {
+          <div [ngClass]="{'list-group-item list-group-item-action d-flex flex-row align-item-center g-2': true, 'bg-success text-light': t.status === 'SUCCESS'}">
+            <div class="flex-grow-1">
+              <p><b>ID:</b> {{t.task_id}}<br>
+                <b>Task:</b> {{t.task_name}}
+              </p>
+            </div>
+          </div>
+        }
+      </div>
     </div>
   </div>
 </div>

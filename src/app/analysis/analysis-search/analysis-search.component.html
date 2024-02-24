@@ -1,0 +1,25 @@
+@if (mode === "typeahead") {
+  <div class="form-group">
+    <label for="searchAnalysis">Analysis</label>
+    <input (selectItem)="selectionHandler($event)" [resultTemplate]="resultTemplate" [inputFormatter]="formatter" id="searchAnalysis" class="form-control" type="search" placeholder="Experiment search" [class.is-invalid]="searchFailed" [(ngModel)]="searchTerm" [ngbTypeahead]="search">
+    @if (searching) {
+      <small class="form-text text-muted">Searching...</small>
+    }
+    @if (searchFailed) {
+      <small class="invalid-feedback">No analyses found</small>
+    }
+  </div>
+
+} @else {
+  <form [formGroup]="form">
+    <div class="form-floating">
+      <input id="searchAnalysisEmit" class="form-control" type="search" formControlName="searchTerm" [class.is-invalid]="searchFailed">
+      <label for="searchAnalysisEmit">Analysis search</label>
+    </div>
+  </form>
+}
+
+
+<ng-template #resultTemplate let-r="result" let-t="term">
+  <ngb-highlight [result]="r.analysis_name" [term]="t"></ngb-highlight>
+</ng-template>

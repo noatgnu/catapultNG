@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {GeneralService} from "../../general.service";
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -20,17 +20,24 @@ import {AnalysisType} from "../analysis";
   styleUrl: './analysis-create.component.scss'
 })
 export class AnalysisCreateComponent implements OnInit{
-
+  @Input() mode: "fromExp" | "searchExp" = "searchExp"
   form = this.fb.group({
     analysis_name: new FormControl(null, Validators.required),
-    experiment: new FormControl(null, Validators.required),
+    experiment: new FormControl(0, Validators.required),
     analysis_type: new FormControl("diann-spectral", Validators.required),
     fasta_file: new FormControl(null),
     spectral_library: new FormControl(null),
   })
 
   analysisTypeChoices: AnalysisType[] = []
-  selectedExperiment?: Experiment
+  _selectedExperiment?: Experiment
+  set selectedExperiment(experiment: Experiment) {
+    this._selectedExperiment = experiment
+    this.form.controls["experiment"].setValue(experiment.id)
+  }
+  get selectedExperiment(): Experiment | undefined {
+    return this._selectedExperiment
+  }
   constructor(private generalService: GeneralService, private fb: FormBuilder, private modal: NgbActiveModal, private experimentService: ExperimentService, private analysisService: AnalysisService) {
     this.analysisService.getAnalysisType().subscribe((data) => {
       this.analysisTypeChoices = data

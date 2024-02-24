@@ -10,6 +10,9 @@ import {NgClass} from "@angular/common";
 import {forkJoin} from "rxjs";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AnalysisCreateComponent} from "../create/analysis-create.component";
+import {AnalysisSearchComponent} from "../analysis-search/analysis-search.component";
+import {ExperimentService} from "../../experiment/experiment.service";
+import { Task } from '../../task/task';
 
 @Component({
   selector: 'app-analysis-manage',
@@ -18,7 +21,8 @@ import {AnalysisCreateComponent} from "../create/analysis-create.component";
     ExperimentSearchComponent,
     FormsModule,
     ReactiveFormsModule,
-    NgClass
+    NgClass,
+    AnalysisSearchComponent
   ],
   templateUrl: './analysis-manage.component.html',
   styleUrl: './analysis-manage.component.scss'
@@ -55,7 +59,11 @@ export class AnalysisManageComponent implements OnInit{
 
   selectedAnalyses: number[] = []
 
-  constructor(private modal: NgbModal, private activatedRoute: ActivatedRoute, private generalService: GeneralService, private analysisService: AnalysisService, private fb: FormBuilder) {
+  selectedExperiment?: Experiment
+  editExperiment: boolean = false
+  tasks?: Task[]
+
+  constructor(private experimentService: ExperimentService, private modal: NgbModal, private activatedRoute: ActivatedRoute, private generalService: GeneralService, private analysisService: AnalysisService, private fb: FormBuilder) {
     this.analysisService.getAnalysisType().subscribe((data: AnalysisType[]) => {
       this.analysisTypeChoices = data
     })
@@ -116,12 +124,17 @@ export class AnalysisManageComponent implements OnInit{
     }
   }
 
-  selectAnalysis(experiment_id: number) {
-    if (this.clickedAnalysis === experiment_id) {
+  selectAnalysis(analysis_id: number) {
+    this.selectedExperiment= undefined
+    if (this.clickedAnalysis === analysis_id) {
       this.clickedAnalysis = -1
     } else {
-      this.clickedAnalysis = experiment_id
-      this.analysisService.getAnalysis(experiment_id).subscribe((analysis: Analysis) => {
+      this.clickedAnalysis = analysis_id
+      this.analysisService.getAssociatedTasks(analysis_id).subscribe((tasks: Task[]) => {
+        this.tasks = tasks
+        console.log(tasks)
+      })
+      this.analysisService.getAnalysis(analysis_id).subscribe((analysis: Analysis) => {
         this.form.patchValue({
           id: analysis.id,
           analysis_name: analysis.analysis_name,
@@ -129,8 +142,18 @@ export class AnalysisManageComponent implements OnInit{
           experiment: analysis.experiment,
           fasta_file: analysis.fasta_file,
           spectral_library: analysis.spectral_library,
-          created_at: new Date(analysis.created_at).toISOString().slice(0, 10),
-          updated_at: new Date(analysis.updated_at).toISOString().slice(0, 10),
+          created_at: new Date(analysis.created_at),
+          updated_at: new Date(analysis.updated_at),
+          processing: analysis.processing,
+          completed: analysis.completed,
+          start_time: new Date(analysis.start_time),
+          end_time: new Date(analysis.end_time),
+          commands: analysis.commands,
+          log: analysis.log,
+          output_folder: analysis.output_folder,
+        })
+        this.experimentService.getExperiment(analysis.experiment).subscribe((experiment: Experiment) => {
+          this.selectedExperiment = experiment
         })
       })
     }
@@ -174,7 +197,23 @@ export class AnalysisManageComponent implements OnInit{
           this.previous = data.previous
           this.n_analysis = data.count
         })
+
       })
     }
+  }
+
+  handleAnalysisSearchQuery(analysisQuery: AnalysisQuery) {
+    this.analyses = analysisQuery.results
+    this.next = analysisQuery.next
+    this.previous = analysisQuery.previous
+    this.n_analysis = analysisQuery.count
+  }
+
+  handleExperimentSelect(experiment: Experiment) {
+    this.form.patchValue({
+      experiment: experiment.id
+    })
+    this.selectedExperiment = experiment
+    this.editExperiment = false
   }
 }

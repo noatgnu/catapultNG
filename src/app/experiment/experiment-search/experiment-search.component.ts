@@ -19,6 +19,16 @@ import {NgbHighlight, NgbTypeahead} from "@ng-bootstrap/ng-bootstrap";
 })
 export class ExperimentSearchComponent {
   @Input() mode: "typeahead" | "emit" = "typeahead"
+  _experiment?: Experiment
+  @Input() set experiment(value: Experiment) {
+    console.log(value)
+    this._experiment = value
+    this.searchTerm = value.experiment_name
+  }
+  get experiment(): Experiment|undefined {
+    return this._experiment
+  }
+
   searchTerm: string = ""
 
   searching: boolean = false

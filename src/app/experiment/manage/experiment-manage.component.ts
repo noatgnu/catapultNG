@@ -9,6 +9,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ExperimentCreateComponent} from "../create/experiment-create.component";
 import {forkJoin} from "rxjs";
 import {ExperimentSearchComponent} from "../experiment-search/experiment-search.component";
+import {AnalysisCreateComponent} from "../../analysis/create/analysis-create.component";
 
 @Component({
   selector: 'app-experiment-manage',
@@ -101,6 +102,7 @@ export class ExperimentManageComponent implements OnInit{
         })
       })
     }
+
   }
 
   deleteExperiment(experiment_id: number) {
@@ -171,5 +173,13 @@ export class ExperimentManageComponent implements OnInit{
         this.n_experiment = data.count
       })
     }
+  }
+
+  openCreateAnalysisModal() {
+    const ref = this.modal.open(AnalysisCreateComponent)
+    ref.componentInstance.mode = "fromExp"
+    this.experimentService.getExperiment(this.clickedExperiment).subscribe((experiment: Experiment) => {
+      ref.componentInstance.selectedExperiment = experiment
+    })
   }
 }

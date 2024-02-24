@@ -23,6 +23,11 @@ export const routes: Routes = [
     data: {breadcrumbs: ['analysis']}
   },
   {
+    path: 'task',
+    loadChildren: () => import('./task/task.module').then(m => m.TaskModule),
+    data: {breadcrumbs: ['task']}
+  },
+  {
     path: '**',
     redirectTo: 'home',
     data: {breadcrumbs: ['home']}
