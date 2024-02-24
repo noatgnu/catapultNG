@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    Create Experiment
+  </h5>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-group">
+      <label for="experiment">Experiment</label>
+      <input type="text" class="form-control" id="experiment" formControlName="experiment" placeholder="Expected experiment folder path">
+    </div>
+    <div class="form-group">
+      <label for="vendor">Vendor</label>
+      <select class="form-select" id="vendor">
+        @for (v of vendorChoices; track v) {
+          <option value="{{v.value}}">{{v.vendor}}</option>
+        }
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="sample_count">Expected Sample Number</label>
+      <input type="number" class="form-control" id="sample_count" formControlName="sample_count" placeholder="Expected sample number">
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+  <button type="button" class="btn btn-primary" (click)="createExperiment()">Create</button>
+</div>
