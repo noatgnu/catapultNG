@@ -1,0 +1,12 @@
+<div class="bg-dark text-light h-100 w-100 border-2">
+  <div class="container h-100 p-5">
+    <div class="border border-white d-flex flex-column justify-content-end h-100 rounded-3 p-5 overflow-auto">
+      @for (l of logMessages; track l) {
+        <div>
+          [{{l.timestamp | date:'short'}}] {{l.task_id}}{{ '@' }}{{l.hostname}}: {{l.log}}
+        </div>
+      }
+    </div>
+
+  </div>
+</div>

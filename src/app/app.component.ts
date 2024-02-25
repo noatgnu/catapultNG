@@ -15,6 +15,7 @@ import {AccountsService} from "./accounts/accounts.service";
 import {read} from "@popperjs/core";
 import {ExperimentCreateComponent} from "./experiment/create/experiment-create.component";
 import {AnalysisCreateComponent} from "./analysis/create/analysis-create.component";
+import {WebsocketService} from "./websocket.service";
 
 @Component({
   selector: 'app-root',
@@ -31,9 +32,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit{
   ready: boolean = false
 
 
-  constructor(private generalService: GeneralService, private changes: ChangeDetectorRef, public accounts: AccountsService, private modal: NgbModal) {
+  constructor(private websocketService: WebsocketService, private generalService: GeneralService, private changes: ChangeDetectorRef, public accounts: AccountsService, private modal: NgbModal) {
     this.accounts.loadToken()
     this.ready = true
+    this.websocketService.connectNotification().asObservable().subscribe((data: any) => {
+      console.log(data)
+    })
 
   }
 

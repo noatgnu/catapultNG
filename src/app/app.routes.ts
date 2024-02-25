@@ -28,6 +28,10 @@ export const routes: Routes = [
     data: {breadcrumbs: ['task']}
   },
   {
+    path: 'log',
+    loadChildren: () => import('./log/log.module').then(m => m.LogModule),
+  },
+  {
     path: '**',
     redirectTo: 'home',
     data: {breadcrumbs: ['home']}
