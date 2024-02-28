@@ -147,7 +147,7 @@ export class AnalysisManageComponent implements OnInit{
           processing: analysis.processing,
           completed: analysis.completed,
           start_time: new Date(analysis.start_time),
-          end_time: new Date(analysis.end_time),
+          end_time: new Date(analysis.stop_time),
           commands: analysis.commands,
           log: analysis.log,
           output_folder: analysis.output_folder,

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {WebsocketService} from "../../websocket.service";
 import {DatePipe} from "@angular/common";
 
@@ -11,7 +11,7 @@ import {DatePipe} from "@angular/common";
   templateUrl: './analysis-log.component.html',
   styleUrl: './analysis-log.component.scss'
 })
-export class AnalysisLogComponent implements AfterViewInit{
+export class AnalysisLogComponent implements AfterViewInit, OnDestroy{
   @ViewChild('logContainer') logContainer: ElementRef | undefined;
 
   logMessages: {
@@ -26,6 +26,9 @@ export class AnalysisLogComponent implements AfterViewInit{
       data.timestamp = new Date(data.timestamp*1000)
 
       this.logMessages.push(data)
+      if (this.logMessages.length > 100) {
+        this.logMessages = this.logMessages.slice(1)
+      }
       if (this.logContainer) {
         this.logContainer.nativeElement.scrollTop = this.logContainer.nativeElement.scrollHeight
       }
@@ -45,5 +48,9 @@ export class AnalysisLogComponent implements AfterViewInit{
     if (this.logContainer) {
       this.logContainer.nativeElement.scrollTop = this.logContainer.nativeElement.scrollHeight
     }*/
+  }
+
+  ngOnDestroy() {
+    this.websocketService.disconnectAnalysisLog()
   }
 }

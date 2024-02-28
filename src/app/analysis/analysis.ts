@@ -8,7 +8,7 @@ export interface Analysis {
   processing: boolean;
   completed: boolean;
   start_time: Date;
-  end_time: Date;
+  stop_time: Date;
   log: string;
   fasta_file: string;
   spectral_library: string;

@@ -60,4 +60,14 @@ export class WebsocketService {
       return this.analysisLogConnection
     }
   }
+
+  disconnectNotification() {
+    this.notificationConnection?.complete()
+    this.notificationConnection = undefined
+  }
+
+  disconnectAnalysisLog() {
+    this.analysisLogConnection?.complete()
+    this.analysisLogConnection = undefined
+  }
 }

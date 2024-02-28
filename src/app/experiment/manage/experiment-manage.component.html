@@ -14,6 +14,9 @@
         <button class="btn btn-sm btn-dark" (click)="nextPage()" [disabled]="!next">></button>
       </nav>
       <app-experiment-search [mode]="'emit'" (searchQuery)="handleSearchQueryResult($event)"></app-experiment-search>
+      <div class="overflow-auto" style="height: 78vh">
+
+      </div>
       <div class="list-group d-flex flex-column rounded-0 overflow-auto">
         @for (e of experiments; track e) {
           <div [ngClass]="{'list-group-item list-group-item-action d-flex flex-row align-item-center g-2': true, 'bg-primary': e.id === clickedExperiment, 'text-light': e.id === clickedExperiment}" (click)="selectExperiment(e.id)">
