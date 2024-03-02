@@ -3,12 +3,13 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Analysis, AnalysisQuery, AnalysisType} from "./analysis";
 import { Task } from '../task/task';
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AnalysisService {
-  baseURL = "http://localhost"
+  baseURL = environment.baseURL
 
   constructor(private http: HttpClient) { }
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 export class AccountsService {
   token: string = ""
   loggedIn: boolean = false
-  baseUrl = "http://localhost"
+  baseURL = environment.baseURL
   constructor(private http: HttpClient) { }
 
   login(username: string, password: string) {
@@ -15,7 +16,7 @@ export class AccountsService {
     const headers = new HttpHeaders()
     headers.append("Content-Type", "application/json")
     headers.append("Accept", "application/json")
-    return this.http.post(`${this.baseUrl}/api-token-auth/`, {username: username, password: password}, {headers: headers})
+    return this.http.post(`${this.baseURL}/api-token-auth/`, {username: username, password: password}, {headers: headers})
   }
 
   saveToken(username: string, token: string) {

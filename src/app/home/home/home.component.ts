@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {ExperimentService} from "../../experiment/experiment.service";
 import {AnalysisService} from "../../analysis/analysis.service";
 import {TaskService} from "../../task/task.service";
+import {WorkerQuery} from "../worker";
+import {WorkerService} from "../worker.service";
 
 @Component({
   selector: 'app-home',
@@ -14,7 +16,8 @@ export class HomeComponent {
   n_experiments: number = 0;
   n_analyses: number = 0;
   n_tasks: number = 0;
-  constructor(private experimentService: ExperimentService, private analysisService: AnalysisService, private taskService: TaskService) {
+  workerQuery?: WorkerQuery;
+  constructor(private experimentService: ExperimentService, private analysisService: AnalysisService, private taskService: TaskService, private workerService: WorkerService) {
     this.experimentService.getExperiments().subscribe((data) => {
       this.n_experiments = data.count;
     });
@@ -24,5 +27,8 @@ export class HomeComponent {
     this.taskService.getTasks().subscribe((data) => {
       this.n_tasks = data.count;
     });
+    this.workerService.getWorkers().subscribe((data) => {
+      this.workerQuery = data;
+    })
   }
 }
