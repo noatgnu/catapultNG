@@ -15,6 +15,7 @@ export interface Analysis {
   commands: string;
   output_folder: string;
   default_analysis: boolean;
+  ready: boolean;
 }
 
 export interface AnalysisQuery {

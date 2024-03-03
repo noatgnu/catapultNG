@@ -40,9 +40,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit{
     if (this.accounts.loggedIn) {
       this.toast.show("Login", "Successfully logged in")
     }
-    this.websocketService.connectNotification().asObservable().subscribe((data: any) => {
-      console.log(data)
-    })
+
 
   }
 
