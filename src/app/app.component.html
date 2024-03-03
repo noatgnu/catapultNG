@@ -1,6 +1,6 @@
-<div class="container-fluid d-flex flex-row p-0 m-0 w-100 h-100">
+<div class="container-fluid d-flex flex-row p-0 m-0 vw-100 vh-100">
   <nav ngbNav #nav="ngbNav" [(activeId)]="active"
-       class="flex-column navbar navbar-dark bg-dark"
+       class="flex-column navbar navbar-dark bg-dark vh-100"
        orientation="vertical"
        style="width: 50px">
     <button class="btn btn-dark" ngbNavItem="home" routerLink="/home" routerLinkActive="active"><i class="bi bi-house"></i></button>
@@ -10,7 +10,7 @@
     </div>
 
   </nav>
-  <div class="flex-grow-1 w-100 d-flex flex-column">
+  <div class="flex-grow-1 vw-100 d-flex flex-column">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">CATAPULT</a>
@@ -69,7 +69,7 @@
       </nav>
     }-->
     @if (ready) {
-      <div class="h-100">
+      <div class="vh-100">
         <router-outlet></router-outlet>
       </div>
     }

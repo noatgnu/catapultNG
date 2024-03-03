@@ -13,6 +13,7 @@ import {AnalysisCreateComponent} from "../create/analysis-create.component";
 import {AnalysisSearchComponent} from "../analysis-search/analysis-search.component";
 import {ExperimentService} from "../../experiment/experiment.service";
 import { Task } from '../../task/task';
+import {WebsocketService} from "../../websocket.service";
 
 @Component({
   selector: 'app-analysis-manage',
@@ -53,6 +54,7 @@ export class AnalysisManageComponent implements OnInit{
     commands: new FormControl(""),
     output_folder: new FormControl(""),
     default_analysis: new FormControl(false),
+    ready: new FormControl(false),
   })
 
   analysisTypeChoices: AnalysisType[] = []
@@ -63,7 +65,7 @@ export class AnalysisManageComponent implements OnInit{
   editExperiment: boolean = false
   tasks?: Task[]
 
-  constructor(private experimentService: ExperimentService, private modal: NgbModal, private activatedRoute: ActivatedRoute, private generalService: GeneralService, private analysisService: AnalysisService, private fb: FormBuilder) {
+  constructor(private websocketService: WebsocketService, private experimentService: ExperimentService, private modal: NgbModal, private activatedRoute: ActivatedRoute, private generalService: GeneralService, private analysisService: AnalysisService, private fb: FormBuilder) {
     this.analysisService.getAnalysisType().subscribe((data: AnalysisType[]) => {
       this.analysisTypeChoices = data
     })
@@ -72,6 +74,15 @@ export class AnalysisManageComponent implements OnInit{
       this.next = data.next
       this.previous = data.previous
       this.n_analysis = data.count
+    })
+    this.websocketService.connectNotification().asObservable().subscribe((data: any) => {
+      console.log(data)
+      if (this.clickedAnalysis > 0) {
+        this.analysisService.getAssociatedTasks(this.clickedAnalysis).subscribe((tasks: Task[]) => {
+          this.tasks = tasks
+        })
+      }
+
     })
   }
 
@@ -132,7 +143,6 @@ export class AnalysisManageComponent implements OnInit{
       this.clickedAnalysis = analysis_id
       this.analysisService.getAssociatedTasks(analysis_id).subscribe((tasks: Task[]) => {
         this.tasks = tasks
-        console.log(tasks)
       })
       this.analysisService.getAnalysis(analysis_id).subscribe((analysis: Analysis) => {
         this.form.patchValue({
@@ -151,6 +161,7 @@ export class AnalysisManageComponent implements OnInit{
           commands: analysis.commands,
           log: analysis.log,
           output_folder: analysis.output_folder,
+          ready: analysis.ready,
         })
         this.experimentService.getExperiment(analysis.experiment).subscribe((experiment: Experiment) => {
           this.selectedExperiment = experiment
@@ -215,5 +226,13 @@ export class AnalysisManageComponent implements OnInit{
     })
     this.selectedExperiment = experiment
     this.editExperiment = false
+  }
+
+  queueAnalysis(analysis_id: number) {
+    if (analysis_id > 0) {
+      this.analysisService.queueAnalysis(analysis_id).subscribe((analysis: any) => {
+        console.log(analysis)
+      })
+    }
   }
 }

@@ -55,4 +55,8 @@ export class AnalysisService {
   getAssociatedTasks(analysis_id: number): Observable<Task[]> {
     return this.http.get<Task[]>(`${this.baseURL}/api/analyses/${analysis_id}/get_associated_tasks`, {observe: "body", responseType: "json"})
   }
+
+  queueAnalysis(analysis_id: number): Observable<any> {
+    return this.http.post<any>(`${this.baseURL}/api/analyses/${analysis_id}/queue_analysis/`, {observe: "body", responseType: "json"})
+  }
 }

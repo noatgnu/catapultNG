@@ -6,6 +6,10 @@ import {WorkerQuery} from "../worker";
 import {WorkerService} from "../worker.service";
 import {WebsocketService} from "../../websocket.service";
 import {DatePipe, NgClass} from "@angular/common";
+import {ExperimentQuery} from "../../experiment/experiment";
+import {AnalysisQuery} from "../../analysis/analysis";
+import {TaskQuery} from "../../task/task";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-home',
@@ -21,6 +25,11 @@ export class HomeComponent implements OnDestroy {
   n_experiments: number = 0;
   n_analyses: number = 0;
   n_tasks: number = 0;
+  experimentQuery?: ExperimentQuery;
+  analysisQuery?: AnalysisQuery;
+  taskQuery?: TaskQuery;
+  baseURL = environment.baseURL
+
   workerQuery?: WorkerQuery;
   selectedWorker?: string;
   @ViewChild('logContainer') logContainer: ElementRef | undefined;
@@ -68,12 +77,15 @@ export class HomeComponent implements OnDestroy {
   getData() {
     this.experimentService.getExperiments().subscribe((data) => {
       this.n_experiments = data.count;
+      this.experimentQuery = data;
     });
     this.analysisService.getAnalyses().subscribe((data) => {
       this.n_analyses = data.count;
+      this.analysisQuery = data;
     });
     this.taskService.getTasks().subscribe((data) => {
       this.n_tasks = data.count;
+      this.taskQuery = data;
     });
     this.workerService.getWorkers().subscribe((data) => {
       this.workerQuery = data;

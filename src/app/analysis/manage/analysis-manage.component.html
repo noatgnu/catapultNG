@@ -29,7 +29,12 @@
               }
               <div class="flex-grow-1">
                 <p><b>ID:</b> {{e.id}}<br>
-                  <b>Analysis:</b> {{e.analysis_name}}
+                  <b>Analysis:</b> {{e.analysis_name}}<br>
+                  @if (e.ready) {
+                    <span class="badge bg-success">Ready</span>
+                  } @else {
+                    <span class="badge bg-warning">Not Ready</span>
+                  }
                 </p>
               </div>
 
@@ -148,7 +153,10 @@
 
             <div class="d-flex gap-2">
               <button class="btn btn-primary" (click)="updateAnalysis()">Update</button>
-              <button class="btn btn-primary">Queue Analysis</button>
+              @if (form.value.id && form.value.ready) {
+                <button class="btn btn-primary" (click)="queueAnalysis(form.value.id)">Queue Analysis</button>
+              }
+
               <button class="btn btn-danger" (click)="deleteAnalysis(clickedAnalysis)">Delete</button>
             </div>
           </form>
