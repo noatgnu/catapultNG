@@ -14,8 +14,8 @@ export interface Worker {
     "Machine": string;
     "Processor": string;
     "Physical cores": number;
-    "Logical cores": number;
-    "Total memory": string;
+    "Total cores": number;
+    "Total Memory": string;
     "CPU Frequency": string;
   }
 }
