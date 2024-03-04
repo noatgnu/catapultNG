@@ -14,6 +14,7 @@ import {AnalysisSearchComponent} from "../analysis-search/analysis-search.compon
 import {ExperimentService} from "../../experiment/experiment.service";
 import { Task } from '../../task/task';
 import {WebsocketService} from "../../websocket.service";
+import {FileBrowserModalComponent} from "../../file-browser-modal/file-browser-modal.component";
 
 @Component({
   selector: 'app-analysis-manage',
@@ -234,5 +235,9 @@ export class AnalysisManageComponent implements OnInit{
         console.log(analysis)
       })
     }
+  }
+
+  openFileBrowser() {
+    this.modal.open(FileBrowserModalComponent, {size: "lg"})
   }
 }

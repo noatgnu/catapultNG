@@ -6,10 +6,11 @@ import {WorkerQuery} from "../worker";
 import {WorkerService} from "../worker.service";
 import {WebsocketService} from "../../websocket.service";
 import {DatePipe, NgClass} from "@angular/common";
-import {ExperimentQuery} from "../../experiment/experiment";
-import {AnalysisQuery} from "../../analysis/analysis";
+import {Experiment, ExperimentQuery} from "../../experiment/experiment";
+import {Analysis, AnalysisQuery} from "../../analysis/analysis";
 import {TaskQuery} from "../../task/task";
 import {environment} from "../../../environments/environment";
+import {forkJoin} from "rxjs";
 
 @Component({
   selector: 'app-home',
@@ -29,10 +30,13 @@ export class HomeComponent implements OnDestroy {
   analysisQuery?: AnalysisQuery;
   taskQuery?: TaskQuery;
   baseURL = environment.baseURL
+  selectedTask?: number;
 
   workerQuery?: WorkerQuery;
   selectedWorker?: string;
   @ViewChild('logContainer') logContainer: ElementRef | undefined;
+  experiment?: Experiment;
+  analysis?: Analysis;
 
   logMessages: {
     log: string,
@@ -99,5 +103,19 @@ export class HomeComponent implements OnDestroy {
       this.selectedWorker = worker_hostname
     }
     console.log(this.selectedWorker)
+  }
+
+  handleTaskClick(task_id: number) {
+    if (this.selectedTask === task_id) {
+      this.selectedTask = undefined
+      this.experiment = undefined
+      this.analysis = undefined
+    } else {
+      this.selectedTask = task_id
+    }
+    forkJoin([this.taskService.getAnalysis(task_id), this.taskService.getExperiment(task_id)]).subscribe((data) => {
+      this.experiment = data[1]
+      this.analysis = data[0]
+    })
   }
 }

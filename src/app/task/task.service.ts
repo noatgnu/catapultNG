@@ -3,6 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Task, TaskQuery} from "./task";
 import {environment} from "../../environments/environment";
+import {Experiment} from "../experiment/experiment";
+import {Analysis} from "../analysis/analysis";
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +34,13 @@ export class TaskService {
 
   searchTasks(query: string): Observable<TaskQuery> {
     return this.http.get<TaskQuery>(`${this.baseURL}/api/tasks?search=${query}`, {observe: "body", responseType: "json"})
+  }
+
+  getExperiment(id: number): Observable<Experiment> {
+    return this.http.get<Experiment>(`${this.baseURL}/api/tasks/${id}/get_experiment`, {observe: "body", responseType: "json"})
+  }
+
+  getAnalysis(id: number): Observable<Analysis> {
+    return this.http.get<Analysis>(`${this.baseURL}/api/tasks/${id}/get_analysis`, {observe: "body", responseType: "json"})
   }
 }

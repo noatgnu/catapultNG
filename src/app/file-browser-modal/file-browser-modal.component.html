@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    File Path Browser
+  </h5>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-floating">
+      <input type="text" class="form-control" id="file_path" formControlName="path" placeholder="File/Folder Location">
+      <label for="file_path">Storage Location</label>
+    </div>
+    <div class="d-flex flex-row gap-2 mt-2">
+      <div class="list-group overflow-auto" style="width: 100%; height:50vh">
+        @for (f of folders; track f) {
+          <div class="list-group-item" (click)="clickedFolder = f; clickedFile = ''" [ngClass]="{'active': clickedFolder === f}">
+            {{ f }}
+          </div>
+        }
+        @for (f of files; track f) {
+          <div class="list-group-item" (click)="clickedFile = f; clickedFolder = ''" [ngClass]="{'active': clickedFile === f}">
+            {{ f }}
+          </div>
+        }
+      </div>
+    </div>
+  </form>
+</div>
