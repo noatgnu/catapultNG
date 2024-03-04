@@ -34,6 +34,8 @@ export class HomeComponent implements OnDestroy {
 
   workerQuery?: WorkerQuery;
   selectedWorker?: string;
+  workerInfo?: any;
+
   @ViewChild('logContainer') logContainer: ElementRef | undefined;
   experiment?: Experiment;
   analysis?: Analysis;
@@ -99,9 +101,12 @@ export class HomeComponent implements OnDestroy {
   clickWorkerRow(worker_hostname: string) {
     if (this.selectedWorker === worker_hostname) {
       this.selectedWorker = undefined
+      this.workerInfo = undefined
     } else {
       this.selectedWorker = worker_hostname
+      this.workerInfo = this.workerQuery?.results.find((worker) => worker.worker_hostname === worker_hostname)?.worker_info
     }
+    console.log(this.workerInfo)
     console.log(this.selectedWorker)
   }
 

@@ -62,7 +62,7 @@
         </div>
       </div>
     </nav>
-    <div class="list-group overflow-auto" style="height: 100%" #logContainer>
+    <div class="list-group overflow-auto" style="height: 70%" #logContainer>
       @for (l of logMessages; track l) {
         <a href="#" class="list-group-item list-group-item-action">
           <div class="d-flex justify-content-between">
@@ -72,6 +72,28 @@
         </a>
       }
     </div>
+    @if (workerInfo) {
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex flex-wrap text-light">
+        <div class="container-fluid">
+          <div class="navbar-brand">
+            Worker info
+          </div>
+        </div>
+      </nav>
+      <div class="overflow-auto p-2">
+        <p>
+          <strong>System:</strong> {{workerInfo?.System}} <br>
+          <strong>Release:</strong> {{workerInfo?.Release}} <br>
+          <strong>Version:</strong> {{workerInfo?.Version}} <br>
+          <strong>Machine:</strong> {{workerInfo?.Machine}} <br>
+          <strong>Processor:</strong> {{workerInfo?.Processor}} <br>
+          <strong>Logical Cores:</strong> {{ workerInfo['Logical cores'] }} <br>
+          <strong>Physical Cores:</strong> {{ workerInfo['Physical cores'] }} <br>
+          <strong>Total memory:</strong> {{ workerInfo['Total memory'] }} <br>
+          <strong>CPU Frequency</strong> {{ workerInfo['CPU Frequency'] }} <br>
+        </p>
+      </div>
+    }
   </div>
   <div class="border-end border-1 border-black d-flex flex-column flex-grow-0" style="height: 100%; width: 300px; min-width: 300px">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex flex-wrap text-light" style="width: 100%">

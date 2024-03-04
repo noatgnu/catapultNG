@@ -6,6 +6,18 @@ export interface Worker {
   worker_status: string;
   worker_os: string;
   current_tasks: Task[];
+  worker_info: {
+    "System": string;
+    "Node Name": string;
+    "Release": string;
+    "Version": string;
+    "Machine": string;
+    "Processor": string;
+    "Physical cores": number;
+    "Logical cores": number;
+    "Total memory": string;
+    "CPU Frequency": string;
+  }
 }
 
 export interface WorkerQuery {
