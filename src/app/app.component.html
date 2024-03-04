@@ -1,6 +1,6 @@
-<div class="container-fluid d-flex flex-row p-0 m-0 vw-100 vh-100">
+<div class="container-fluid d-flex flex-row p-0 m-0 vw-100 h-100">
   <nav ngbNav #nav="ngbNav" [(activeId)]="active"
-       class="flex-column navbar navbar-dark bg-dark vh-100"
+       class="flex-column navbar navbar-dark bg-dark h-100"
        orientation="vertical"
        style="width: 50px">
     <button class="btn btn-dark" ngbNavItem="home" routerLink="/home" routerLinkActive="active"><i class="bi bi-house"></i></button>
@@ -69,12 +69,10 @@
       </nav>
     }-->
     @if (ready) {
-      <div class="vh-100">
+      <div class="h-100">
         <router-outlet></router-outlet>
       </div>
     }
-
   </div>
-
 </div>
 <app-toast-container></app-toast-container>

@@ -35,9 +35,19 @@ export class FileBrowserModalComponent {
       this.folders = []
       this.generalService.postFileLocation(this.form.value.path).subscribe((data) => {
         this.form.controls.path.setValue(data.current)
-        this.folders = data.folders
+        this.folders = ['..', ...data.folders]
         this.files = data.files
       })
     }
+  }
+
+  handleFolderClick(folder: string) {
+    if (folder === "..") {
+      // @ts-ignore
+      this.form.controls.path.setValue(this.form.value.path.split("/").slice(0, -1).join("/"))
+    } else {
+      this.form.controls.path.setValue(this.form.value.path + "/" + folder)
+    }
+    this.browse()
   }
 }
