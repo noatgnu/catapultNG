@@ -1,12 +1,12 @@
-<div class="d-flex flex-row" style="height: 94.5vh; position:relative">
-  <div class="border-end border-1 border-black d-flex flex-column flex-grow-0" style="height: 100%; width: 300px; min-width: 300px">
+<div class="d-flex flex-row">
+  <div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex flex-wrap text-light">
       <div class="container-fluid">
         <div class="navbar-brand">Workers</div>
       </div>
     </nav>
-    <div>
-      <div class="list-group overflow-auto rounded-0" style="height: 65vh">
+    <div class="home-side-nav-worker-panel">
+      <div class="list-group overflow-auto rounded-0">
         @for (worker of workerQuery?.results; track worker) {
           <div (click)="clickWorkerRow(worker.worker_hostname)" href="#" class="list-group-item list-group-item-action" [ngClass]="{'active': worker.worker_hostname === selectedWorker}">
             <b>{{worker.worker_hostname}}</b>
@@ -35,7 +35,7 @@
         <div class="navbar-brand">Backend</div>
       </div>
     </nav>
-    <div class="d-flex flex-column h-100 p-2">
+    <div class="home-side-nav-server-panel">
       <p class="card-text">
         <strong>Backend:</strong> {{baseURL}}
       </p>
@@ -50,7 +50,7 @@
       </p>
     </div>
   </div>
-  <div class="border-end border-1 border-black d-flex flex-column flex-grow-1 w-100" style="height: 100%">
+  <div class="border-end border-1 border-black d-flex flex-column flex-grow-1">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex flex-wrap text-light">
       <div class="container-fluid">
         <div class="navbar-brand">
@@ -62,16 +62,19 @@
         </div>
       </div>
     </nav>
-    <div class="list-group overflow-auto" style="height: 70%" #logContainer>
-      @for (l of logMessages; track l) {
-        <a href="#" class="list-group-item list-group-item-action">
-          <div class="d-flex justify-content-between">
-            <h5 class="mb-1">{{l.timestamp | date:'short'}}</h5>
-          </div>
-          <p class="mb-1">{{l.log}}</p>
-        </a>
-      }
+    <div class="home-main-content-worker-log">
+      <div class="list-group overflow-auto" #logContainer>
+        @for (l of logMessages; track l) {
+          <a href="#" class="list-group-item list-group-item-action">
+            <div class="d-flex justify-content-between">
+              <h5 class="mb-1">{{l.timestamp | date:'short'}}</h5>
+            </div>
+            <p class="mb-1">{{l.log}}</p>
+          </a>
+        }
+      </div>
     </div>
+
     @if (workerInfo) {
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex flex-wrap text-light">
         <div class="container-fluid">
@@ -80,7 +83,7 @@
           </div>
         </div>
       </nav>
-      <div class="overflow-auto p-2">
+      <div class="home-main-content-worker-detail">
         <p>
           <strong>System:</strong> {{workerInfo?.System}} <br>
           <strong>Release:</strong> {{workerInfo?.Release}} <br>
@@ -95,38 +98,41 @@
       </div>
     }
   </div>
-  <div class="border-end border-1 border-black d-flex flex-column flex-grow-0" style="height: 100%; width: 300px; min-width: 300px">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex flex-wrap text-light" style="width: 100%">
+  <div class="border-end border-1 border-black d-flex flex-column flex-grow-0">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex flex-wrap text-light">
       <div class="container-fluid">
         <div class="navbar-brand">Tasks</div>
       </div>
     </nav>
-    <div class="list-group overflow-auto rounded-0" style="height: 100%">
-      @for (task of taskQuery?.results; track task) {
-        <div (click)="handleTaskClick(task.id)" href="#" class="list-group-item list-group-item-action" [ngClass]="{
+    <div class="home-task-list">
+      <div class="list-group overflow-auto rounded-0">
+        @for (task of taskQuery?.results; track task) {
+          <div (click)="handleTaskClick(task.id)" href="#" class="list-group-item list-group-item-action" [ngClass]="{
         'bg-primary': task.status === 'RUNNING',
         'bg-success': task.status === 'SUCCESS',
         'bg-warn': task.status === 'FAILED',
         'bg-secondary': task.status === 'PENDING',
         'text-light': task.status === 'SUCCESS' || task.status === 'RUNNING' || task.status === 'PENDING' || task.status === 'FAILURE'}">
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{task.task_id}}</h5>
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">{{task.task_id}}</h5>
+            </div>
+            <p class="mb-1">{{task.task_name}}</p>
           </div>
-          <p class="mb-1">{{task.task_name}}</p>
-        </div>
-        @if (task.id === selectedTask && experiment && analysis) {
-          <div class="list-group-item">
-            <p>
-              <strong>Analysis</strong> <br>
-              {{analysis.analysis_name}}
-            </p>
-            <p>
-              <strong>Experiment</strong> <br>
-              {{experiment.experiment_name}}
-            </p>
-          </div>
+          @if (task.id === selectedTask && experiment && analysis) {
+            <div class="list-group-item">
+              <p>
+                <strong>Analysis</strong> <br>
+                {{analysis.analysis_name}}
+              </p>
+              <p>
+                <strong>Experiment</strong> <br>
+                {{experiment.experiment_name}}
+              </p>
+            </div>
+          }
         }
-      }
+      </div>
     </div>
+
   </div>
 </div>

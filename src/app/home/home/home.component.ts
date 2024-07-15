@@ -11,6 +11,7 @@ import {Analysis, AnalysisQuery} from "../../analysis/analysis";
 import {TaskQuery} from "../../task/task";
 import {environment} from "../../../environments/environment";
 import {forkJoin} from "rxjs";
+import {ToastService} from "../../toast.service";
 
 @Component({
   selector: 'app-home',
@@ -47,7 +48,7 @@ export class HomeComponent implements OnDestroy {
     timestamp: Date
   }[] = []
 
-  constructor(private websocketService: WebsocketService, private experimentService: ExperimentService, private analysisService: AnalysisService, private taskService: TaskService, private workerService: WorkerService) {
+  constructor(private toastService: ToastService, private websocketService: WebsocketService, private experimentService: ExperimentService, private analysisService: AnalysisService, private taskService: TaskService, private workerService: WorkerService) {
     this.getData()
     this.websocketService.connectAnalysisLog().asObservable().subscribe((data: any) => {
       data.timestamp = new Date(data.timestamp*1000)
@@ -72,6 +73,7 @@ export class HomeComponent implements OnDestroy {
       }
     })
     this.websocketService.connectNotification().asObservable().subscribe((data: any) => {
+      this.toastService.show(data["task_id"], data["status"])
       this.getData()
     })
   }

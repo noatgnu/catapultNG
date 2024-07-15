@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {map, Observable} from "rxjs";
 import {Experiment, ExperimentQuery, VendorChoice} from "./experiment";
 import {environment} from "../../environments/environment";
+import {ExperimentFile} from "./experiment-file";
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +45,9 @@ export class ExperimentService {
 
   searchExperiments(query: string): Observable<ExperimentQuery> {
     return this.http.get<ExperimentQuery>(`${this.baseURL}/api/experiments?search=${query}`, {observe: "body", responseType: "json"})
+  }
+
+  getAssociatedFiles(id: number): Observable<ExperimentFile[]> {
+    return this.http.get<ExperimentFile[]>(`${this.baseURL}/api/experiments/${id}/get_associated_files`, {observe: "body", responseType: "json"})
   }
 }

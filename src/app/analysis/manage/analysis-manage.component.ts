@@ -15,6 +15,7 @@ import {ExperimentService} from "../../experiment/experiment.service";
 import { Task } from '../../task/task';
 import {WebsocketService} from "../../websocket.service";
 import {FileBrowserModalComponent} from "../../file-browser-modal/file-browser-modal.component";
+import {ToastService} from "../../toast.service";
 
 @Component({
   selector: 'app-analysis-manage',
@@ -66,7 +67,7 @@ export class AnalysisManageComponent implements OnInit{
   editExperiment: boolean = false
   tasks?: Task[]
 
-  constructor(private websocketService: WebsocketService, private experimentService: ExperimentService, private modal: NgbModal, private activatedRoute: ActivatedRoute, private generalService: GeneralService, private analysisService: AnalysisService, private fb: FormBuilder) {
+  constructor(private toastService: ToastService, private websocketService: WebsocketService, private experimentService: ExperimentService, private modal: NgbModal, private activatedRoute: ActivatedRoute, private generalService: GeneralService, private analysisService: AnalysisService, private fb: FormBuilder) {
     this.analysisService.getAnalysisType().subscribe((data: AnalysisType[]) => {
       this.analysisTypeChoices = data
     })
@@ -77,7 +78,7 @@ export class AnalysisManageComponent implements OnInit{
       this.n_analysis = data.count
     })
     this.websocketService.connectNotification().asObservable().subscribe((data: any) => {
-      console.log(data)
+      this.toastService.show(data["task_id"], data["status"])
       if (this.clickedAnalysis > 0) {
         this.analysisService.getAssociatedTasks(this.clickedAnalysis).subscribe((tasks: Task[]) => {
           this.tasks = tasks
@@ -232,7 +233,7 @@ export class AnalysisManageComponent implements OnInit{
   queueAnalysis(analysis_id: number) {
     if (analysis_id > 0) {
       this.analysisService.queueAnalysis(analysis_id).subscribe((analysis: any) => {
-        console.log(analysis)
+        this.toastService.show("Analysis", "Successfully Queued")
       })
     }
   }

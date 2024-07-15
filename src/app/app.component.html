@@ -1,6 +1,6 @@
-<div class="container-fluid d-flex flex-row p-0 m-0 vw-100 h-100">
+<div class="container-fluid d-flex flex-row p-0 m-0">
   <nav ngbNav #nav="ngbNav" [(activeId)]="active"
-       class="flex-column navbar navbar-dark bg-dark h-100"
+       class="flex-column navbar navbar-dark bg-dark"
        orientation="vertical"
        style="width: 50px">
     <button class="btn btn-dark" ngbNavItem="home" routerLink="/home" routerLinkActive="active"><i class="bi bi-house"></i></button>
@@ -10,7 +10,7 @@
     </div>
 
   </nav>
-  <div class="flex-grow-1 vw-100 d-flex flex-column">
+  <div class="flex-grow-1 d-flex flex-column">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">CATAPULT</a>
@@ -21,6 +21,16 @@
           <div class="collapse navbar-collapse">
             <ul class="navbar-nav
           me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <div ngbDropdown class="d-inline-block">
+                  <button type="button" class="btn btn-dark" id="diannButton" ngbDropdownToggle>
+                    <i class="bi bi-book">DIA-NN</i>
+                  </button>
+                  <div ngbDropdownMenu aria-labelledby="diannButton">
+                    <a class="dropdown-item" (click)="openDiannModal()">DIA-NN Param Generator</a>
+                  </div>
+                </div>
+              </li>
               <li class="nav-item">
                 <div ngbDropdown class="d-inline-block">
                   <button type="button" class="btn btn-dark" id="experimentButton" ngbDropdownToggle>
@@ -57,19 +67,8 @@
         </div>
       </div>
     </nav>
-<!--    @if (breadcrumbs.length > 0) {
-      <nav ngbNav class="nav navbar navbar-dark bg-dark" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          @for (b of breadcrumbs; track b) {
-            <li class="breadcrumb-item">
-              <a>{{b}}</a>
-            </li>
-          }
-        </ol>
-      </nav>
-    }-->
     @if (ready) {
-      <div class="h-100">
+      <div>
         <router-outlet></router-outlet>
       </div>
     }

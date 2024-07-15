@@ -18,6 +18,7 @@ import {AnalysisCreateComponent} from "./analysis/create/analysis-create.compone
 import {WebsocketService} from "./websocket.service";
 import {ToastContainerComponent} from "./toast-container/toast-container.component";
 import {ToastService} from "./toast.service";
+import {DiannModalComponent} from "./analysis/diann-modal/diann-modal.component";
 
 @Component({
   selector: 'app-root',
@@ -65,5 +66,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit{
 
   openCreateAnalysisModal() {
     this.modal.open(AnalysisCreateComponent)
+  }
+
+  openDiannModal() {
+    this.modal.open(DiannModalComponent)
   }
 }

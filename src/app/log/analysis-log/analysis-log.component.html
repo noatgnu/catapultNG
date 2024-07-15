@@ -5,9 +5,9 @@
         class="d-flex flex-column justify-content-between"
       >
         @for (l of logMessages; track l) {
-          <p>
-            [{{l.timestamp | date:'short'}}] {{l.hostname}}: {{l.log}}
-          </p>
+        <p>
+          [{{l.timestamp | date:'short'}}] {{l.hostname}}: {{l.log}}
+        </p>
         }
       </div>
     </div>

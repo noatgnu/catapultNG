@@ -1,5 +1,5 @@
-<div class="container-fluid p-0 h-100">
-  <div class="d-flex g-1 h-100">
+<div>
+  <div class="d-flex g-1">
     <div class="border-end border-1 border-black d-flex flex-column" style="height: 100%; width: 300px; min-width: 300px">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex flex-wrap text-light">
         <div class="container-fluid">
@@ -14,8 +14,8 @@
         <button class="btn btn-sm btn-dark" (click)="nextPage()" [disabled]="!next">></button>
       </nav>
       <app-analysis-search [mode]="'emit'" (searchQuery)="handleAnalysisSearchQuery($event)"></app-analysis-search>
-      <div class="overflow-auto" style="height: 78vh">
-        <div class="list-group d-flex flex-column rounded-0 overflow-auto">
+      <div class="analysis-side-nav">
+        <div class="list-group d-flex flex-column rounded-0">
           @for (e of analyses; track e) {
             <div [ngClass]="{
           'list-group-item list-group-item-action d-flex flex-row align-item-center g-2': true,
@@ -43,13 +43,11 @@
         </div>
 
       </div>
-      </div>
-
-    <div class="d-flex flex-column border-black w-100 h-100">
-
+    </div>
+    <div class="analysis-main-content">
       @if (clickedAnalysis === -1) {
-        <div class="container-fluid p-2 d-flex flex-column" style="height: 100%">
-          <div class="border-dark border-opacity-25 rounded-3 d-flex justify-content-center align-items-center h-100"
+        <div class="p-5">
+          <div class="border-dark border-opacity-25 rounded-3 d-flex "
                style="border-style: dashed">
             <div class="p-5">
               <p>
@@ -59,7 +57,7 @@
           </div>
         </div>
       } @else {
-        <div class="container overflow-auto p-5" style="height: 90vh">
+        <div class="p-5">
           <form [formGroup]="form" class="d-flex flex-column gap-2">
             <div class="form-group">
               <label for="analysis_name">Analysis Name</label>
@@ -165,13 +163,13 @@
       }
 
     </div>
-    <div class="border-start border-1 d-flex flex-column border-black h-100" style="width: 300px; min-width: 300px">
+    <div class="border-start border-1 border-black">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex flex-wrap text-light">
         <div class="container-fluid">
           <div class="navbar-brand">Associated Tasks</div>
         </div>
       </nav>
-      <div class="overflow-auto" style="height: 88vh">
+      <div class="analysis-task-list">
         <div class="list-group d-flex flex-column rounded-0">
           @for (t of tasks; track t) {
             <div [ngClass]="{

@@ -1,0 +1,37 @@
+.home-side-nav-worker-panel{
+  width: 300px;
+  border-right: 1px solid #000000;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 64px*6 + 30px);
+  overflow: auto;
+}
+
+.home-side-nav-server-panel{
+  width: 300px;
+
+  display: flex;
+  flex-direction: column;
+  height: calc(64px*2 + 55px);
+  overflow: auto;
+  padding: 20px;
+}
+
+.home-main-content-worker-log {
+  height: calc(100vh - 64px*7 + 30px);
+  width: calc(100vw - 600px - 50px);
+  overflow: auto;
+}
+
+.home-main-content-worker-detail {
+  height: calc(64px*3 + 55px);
+  width: calc(100vw - 600px - 50px);
+  overflow: auto;
+  padding: 20px;
+}
+
+.home-task-list {
+  width: 300px;
+  height: calc(100vh - 64px*2);
+  overflow: auto;
+}

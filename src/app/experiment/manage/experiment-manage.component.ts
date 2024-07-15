@@ -3,13 +3,14 @@ import {ActivatedRoute} from "@angular/router";
 import {GeneralService} from "../../general.service";
 import {ExperimentService} from "../experiment.service";
 import {Experiment, ExperimentQuery, VendorChoice} from "../experiment";
-import {NgClass} from "@angular/common";
+import {DatePipe, NgClass} from "@angular/common";
 import {FormBuilder, FormControl, ReactiveFormsModule} from "@angular/forms";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ExperimentCreateComponent} from "../create/experiment-create.component";
 import {forkJoin} from "rxjs";
 import {ExperimentSearchComponent} from "../experiment-search/experiment-search.component";
 import {AnalysisCreateComponent} from "../../analysis/create/analysis-create.component";
+import {ExperimentFile} from "../experiment-file";
 
 @Component({
   selector: 'app-experiment-manage',
@@ -17,7 +18,8 @@ import {AnalysisCreateComponent} from "../../analysis/create/analysis-create.com
   imports: [
     NgClass,
     ReactiveFormsModule,
-    ExperimentSearchComponent
+    ExperimentSearchComponent,
+    DatePipe
   ],
   providers: [ExperimentService],
   templateUrl: './experiment-manage.component.html',
@@ -40,7 +42,7 @@ export class ExperimentManageComponent implements OnInit{
     updated_at: new FormControl(),
     id: new FormControl()
   })
-
+  associatedFiles: ExperimentFile[] = []
   constructor(private activatedRoute: ActivatedRoute, private generalService: GeneralService, private experimentService: ExperimentService, private fb: FormBuilder, private modal: NgbModal) {
     this.experimentService.getExperiments().subscribe((data: ExperimentQuery) => {
       this.experiments = data.results
@@ -86,6 +88,10 @@ export class ExperimentManageComponent implements OnInit{
           created_at: new Date(experiment.created_at).toISOString().slice(0, 10),
           updated_at: new Date(experiment.updated_at).toISOString().slice(0, 10),
           id: experiment.id
+        })
+        this.experimentService.getAssociatedFiles(experiment.id).subscribe((files: ExperimentFile[]) => {
+          this.associatedFiles = files
+          console.log(files)
         })
       })
     }
