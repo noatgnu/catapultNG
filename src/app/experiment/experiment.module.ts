@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import {ExperimentCreateComponent} from "./create/experiment-create.component";
 import {RouterModule, Routes} from "@angular/router";
 import {ExperimentManageComponent} from "./manage/experiment-manage.component";
-import {HttpClientModule} from "@angular/common/http";
+import {} from "@angular/common/http";
 
 const routes: Routes = [
   {
