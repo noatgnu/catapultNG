@@ -1,3 +1,5 @@
+import {ExperimentFile} from "../experiment/experiment-file";
+
 export interface Analysis {
   id: number;
   analysis_name: string;
@@ -10,12 +12,13 @@ export interface Analysis {
   start_time: Date;
   stop_time: Date;
   log: string;
-  fasta_file: string;
-  spectral_library: string;
   commands: string;
   output_folder: string;
   default_analysis: boolean;
-  ready: boolean;
+  generating_quant: ExperimentFile[];
+  generated_quant: ExperimentFile[];
+  config: number;
+  total_files: number;
 }
 
 export interface AnalysisQuery {

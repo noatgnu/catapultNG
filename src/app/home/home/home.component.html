@@ -24,8 +24,6 @@
                 }
               </ul>
             </div>
-
-
           </div>
         }
       </div>
@@ -74,16 +72,15 @@
         }
       </div>
     </div>
-
-    @if (workerInfo) {
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex flex-wrap text-light">
-        <div class="container-fluid">
-          <div class="navbar-brand">
-            Worker info
-          </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex flex-wrap text-light">
+      <div class="container-fluid">
+        <div class="navbar-brand">
+          Worker info
         </div>
-      </nav>
-      <div class="home-main-content-worker-detail">
+      </div>
+    </nav>
+    <div class="home-main-content-worker-detail">
+      @if (workerInfo) {
         <p>
           <strong>System:</strong> {{workerInfo?.System}} <br>
           <strong>Release:</strong> {{workerInfo?.Release}} <br>
@@ -95,8 +92,11 @@
           <strong>Total memory:</strong> {{ workerInfo['Total Memory'] }} <br>
           <strong>CPU Frequency</strong> {{ workerInfo['CPU Frequency'] }} <br>
         </p>
-      </div>
-    }
+      } @else {
+        No worker selected
+      }
+    </div>
+
   </div>
   <div class="border-end border-1 border-black d-flex flex-column flex-grow-0">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex flex-wrap text-light">
@@ -110,9 +110,9 @@
           <div (click)="handleTaskClick(task.id)" href="#" class="list-group-item list-group-item-action" [ngClass]="{
         'bg-primary': task.status === 'RUNNING',
         'bg-success': task.status === 'SUCCESS',
-        'bg-warn': task.status === 'FAILED',
+        'bg-danger': task.status === 'FAILED',
         'bg-secondary': task.status === 'PENDING',
-        'text-light': task.status === 'SUCCESS' || task.status === 'RUNNING' || task.status === 'PENDING' || task.status === 'FAILURE'}">
+        'text-light': task.status === 'SUCCESS' || task.status === 'RUNNING' || task.status === 'PENDING' || task.status === 'FAILED'}">
             <div class="d-flex w-100 justify-content-between">
               <h5 class="mb-1">{{task.task_id}}</h5>
             </div>

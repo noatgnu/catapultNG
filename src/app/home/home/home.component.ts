@@ -12,6 +12,7 @@ import {TaskQuery} from "../../task/task";
 import {environment} from "../../../environments/environment";
 import {forkJoin} from "rxjs";
 import {ToastService} from "../../toast.service";
+import {LogService} from "../../log/log.service";
 
 @Component({
   selector: 'app-home',
@@ -48,11 +49,19 @@ export class HomeComponent implements OnDestroy {
     timestamp: Date
   }[] = []
 
-  constructor(private toastService: ToastService, private websocketService: WebsocketService, private experimentService: ExperimentService, private analysisService: AnalysisService, private taskService: TaskService, private workerService: WorkerService) {
+  constructor(private toastService: ToastService, private websocketService: WebsocketService, private experimentService: ExperimentService, private analysisService: AnalysisService, private taskService: TaskService, private workerService: WorkerService, private logService: LogService) {
     this.getData()
     this.websocketService.connectAnalysisLog().asObservable().subscribe((data: any) => {
       data.timestamp = new Date(data.timestamp*1000)
-      if (data.hostname === this.selectedWorker) {
+      if (!this.selectedWorker) {
+        this.logMessages.push(data)
+        if (this.logMessages.length > 100) {
+          this.logMessages = this.logMessages.slice(1)
+        }
+        if (this.logContainer) {
+          this.logContainer.nativeElement.scrollTop = this.logContainer.nativeElement.scrollHeight
+        }
+      } else if (data.hostname === this.selectedWorker) {
         this.logMessages.push(data)
         if (this.logMessages.length > 100) {
           this.logMessages = this.logMessages.slice(1)
@@ -98,6 +107,18 @@ export class HomeComponent implements OnDestroy {
     this.workerService.getWorkers().subscribe((data) => {
       this.workerQuery = data;
     })
+    this.logService.getLog().subscribe((data) => {
+      const logMessages = []
+      for (const l of data.results.reverse()) {
+        logMessages.push({
+          log: l.log,
+          task_id: "",
+          hostname: "general",
+          timestamp: l.created_at
+        })
+      }
+      this.logMessages = logMessages
+    })
   }
 
   clickWorkerRow(worker_hostname: string) {
@@ -106,7 +127,23 @@ export class HomeComponent implements OnDestroy {
       this.workerInfo = undefined
     } else {
       this.selectedWorker = worker_hostname
-      this.workerInfo = this.workerQuery?.results.find((worker) => worker.worker_hostname === worker_hostname)?.worker_info
+      const worker = this.workerQuery?.results.find((worker) => worker.worker_hostname === worker_hostname)
+      if (worker) {
+        this.workerInfo = worker.worker_info
+        this.logService.getLog(worker.id).subscribe((data) => {
+          const logMessages = []
+          for (const l of data.results.reverse()) {
+            logMessages.push({
+              log: l.log,
+              task_id: "",
+              hostname: worker.worker_hostname,
+              timestamp: l.created_at
+            })
+          }
+          this.logMessages = logMessages
+        })
+      }
+
     }
     console.log(this.workerInfo)
     console.log(this.selectedWorker)

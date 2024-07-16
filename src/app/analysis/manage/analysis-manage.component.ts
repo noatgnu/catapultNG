@@ -152,8 +152,6 @@ export class AnalysisManageComponent implements OnInit{
           analysis_name: analysis.analysis_name,
           analysis_type: analysis.analysis_type,
           experiment: analysis.experiment,
-          fasta_file: analysis.fasta_file,
-          spectral_library: analysis.spectral_library,
           created_at: new Date(analysis.created_at),
           updated_at: new Date(analysis.updated_at),
           processing: analysis.processing,
@@ -163,7 +161,6 @@ export class AnalysisManageComponent implements OnInit{
           commands: analysis.commands,
           log: analysis.log,
           output_folder: analysis.output_folder,
-          ready: analysis.ready,
         })
         this.experimentService.getExperiment(analysis.experiment).subscribe((experiment: Experiment) => {
           this.selectedExperiment = experiment

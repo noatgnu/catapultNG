@@ -10,4 +10,9 @@ export interface ExperimentFile {
   processing: boolean;
 }
 
-
+export interface ExperimentFileQuery {
+  count: number;
+  next: string|null;
+  previous: string|null;
+  results: ExperimentFile[];
+}

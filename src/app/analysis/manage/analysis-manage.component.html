@@ -30,11 +30,6 @@
               <div class="flex-grow-1">
                 <p><b>ID:</b> {{e.id}}<br>
                   <b>Analysis:</b> {{e.analysis_name}}<br>
-                  @if (e.ready) {
-                    <span class="badge bg-success">Ready</span>
-                  } @else {
-                    <span class="badge bg-warning">Not Ready</span>
-                  }
                 </p>
               </div>
 
@@ -63,29 +58,19 @@
               <label for="analysis_name">Analysis Name</label>
               <input type="text" class="form-control" id="analysis_name" formControlName="analysis_name">
             </div>
+            <div class="form-group">
+              <label for="id">Unique ID</label>
+              <input type="number" class="form-control" id="id" formControlName="id" readonly>
+            </div>
             <div class="d-flex gap-2">
-              <div class="form-group">
+              <!--<div class="form-group">
                 <label for="analysis_type">Analysis Type</label>
                 <select class="form-select" id="analysis_type" formControlName="analysis_type">
                   @for (v of analysisTypeChoices; track v) {
                     <option [value]="v.value">{{v.analysis_type}}</option>
                   }
                 </select>
-              </div>
-
-              <div class="form-group">
-                <label for="id">Unique ID</label>
-                <input type="number" class="form-control" id="id" formControlName="id" readonly>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="fasta_file">Fasta File</label>
-              <input type="text" class="form-control" id="fasta_file" formControlName="fasta_file">
-            </div>
-            <div class="form-group">
-              <label for="spectral_library">Spectral Library</label>
-              <input type="text" class="form-control" id="spectral_library" formControlName="spectral_library">
+              </div>-->
             </div>
             <div class="form-group">
               <b>Created At:</b> {{form.value.created_at}}
@@ -112,19 +97,10 @@
                   Indicate if the analysis is completed.
                 </small>
               </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="default_analysis" formControlName="default_analysis">
-                <label class="form-check-label" for="default_analysis">
-                  Default Analysis
-                </label>
-                <small class="form-text text-muted">
-                  There should be only one default analysis per experiment and it will be used to automatically run analysis if the experiment have no analysis done yet.
-                </small>
-              </div>
             </div>
             <div class="form-group">
               <label for="commands">Command Parameters</label>
-              <textarea class="form-control" id="commands" formControlName="commands"></textarea>
+              <textarea class="form-control" id="commands" formControlName="commands" readonly></textarea>
             </div>
             <div class="form-group">
               <label for="output_folder">Output Folder</label>
