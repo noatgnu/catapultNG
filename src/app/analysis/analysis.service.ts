@@ -9,7 +9,8 @@ import {environment} from "../../environments/environment";
   providedIn: 'root'
 })
 export class AnalysisService {
-  baseURL = environment.baseURL
+  protocol: string = window.location.protocol
+  baseURL = environment.baseURL.replace("http", this.protocol.slice(0, -1))
 
   constructor(private http: HttpClient) { }
 

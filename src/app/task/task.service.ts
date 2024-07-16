@@ -10,7 +10,8 @@ import {Analysis} from "../analysis/analysis";
   providedIn: 'root'
 })
 export class TaskService {
-  baseURL = environment.baseURL
+  protocol: string = window.location.protocol
+  baseURL = environment.baseURL.replace("http", this.protocol.slice(0, -1))
 
   constructor(private http: HttpClient) { }
 

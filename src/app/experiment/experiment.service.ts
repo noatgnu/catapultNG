@@ -9,7 +9,8 @@ import {ExperimentFile} from "./experiment-file";
   providedIn: 'root'
 })
 export class ExperimentService {
-  baseURL = environment.baseURL
+  protocol: string = window.location.protocol
+  baseURL = environment.baseURL.replace("http", this.protocol.slice(0, -1))
 
   constructor(private http: HttpClient) { }
 

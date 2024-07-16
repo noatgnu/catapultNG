@@ -8,7 +8,8 @@ import {environment} from "../../environments/environment";
 export class AccountsService {
   token: string = ""
   loggedIn: boolean = false
-  baseURL = environment.baseURL
+  protocol: string = window.location.protocol
+  baseURL = environment.baseURL.replace("http", this.protocol.slice(0, -1))
   constructor(private http: HttpClient) { }
 
   login(username: string, password: string) {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {WebSocketSubject} from "rxjs/internal/observable/dom/WebSocketSubject";
+import {environment} from "../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,8 @@ export class WebsocketService {
   personalID: string = crypto.randomUUID()
   connectingNotificationChannel: boolean = false
   connectingAnalysisLogChannel: boolean = false
+  protocol: string = window.location.protocol
+  baseURL = environment.baseURL.replace("http", this.protocol.slice(0, -1)).replace("http", "ws")
 
   constructor() { }
 
@@ -17,7 +20,7 @@ export class WebsocketService {
     this.connectingNotificationChannel = true
     if (!this.notificationConnection) {
       this.notificationConnection = new WebSocketSubject({
-        url: `ws://localhost/ws/notification/alert/${this.personalID}/`,
+        url: `${this.baseURL}/ws/notification/alert/${this.personalID}/`,
         openObserver: {
           next: () => {
             console.log("Connected to notification channel")
@@ -41,7 +44,7 @@ export class WebsocketService {
     this.connectingAnalysisLogChannel = true
     if (!this.analysisLogConnection) {
       this.analysisLogConnection = new WebSocketSubject({
-        url: `ws://localhost/ws/log/analysis_log/`,
+        url: `${this.baseURL}/ws/log/analysis_log/`,
         openObserver: {
           next: () => {
             console.log("Connected to analysis log channel")

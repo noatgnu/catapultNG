@@ -7,7 +7,8 @@ import {environment} from "../environments/environment";
   providedIn: 'root'
 })
 export class GeneralService {
-  baseURL = environment.baseURL
+  protocol: string = window.location.protocol
+  baseURL = environment.baseURL.replace("http", this.protocol.slice(0, -1))
   currentBreadcrumbs: {paths: string[], active: string} = {paths: [], active: ""}
 
   breadCrumbsSubject: BehaviorSubject<{ paths: string[], active: string }> = new BehaviorSubject<{paths: string[], active: string}>({paths: [], active: ""});

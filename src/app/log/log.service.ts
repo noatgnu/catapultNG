@@ -7,7 +7,8 @@ import {LogRecord, LogRecordQuery} from "./log-record";
   providedIn: 'root'
 })
 export class LogService {
-  baseURL = environment.baseURL
+  protocol: string = window.location.protocol
+  baseURL = environment.baseURL.replace("http", this.protocol.slice(0, -1))
 
   constructor(private http: HttpClient) { }
 
