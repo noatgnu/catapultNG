@@ -51,6 +51,14 @@
 
       } @else {
         <div class="experiment-main-content p-5">
+          @if (resultSummaries.length > 0) {
+            <div class="d-flex justify-content-center">
+              <div style="max-width: 1000px; overflow: auto">
+                <app-bar-chart-result-summary [plotType]="'precursor'" [data]="resultSummaries"></app-bar-chart-result-summary>
+              </div>
+            </div>
+          }
+
           <form [formGroup]="form" class="d-flex flex-column gap-2">
             <div class="form-group">
               <label for="experiment_name">Experiment</label>

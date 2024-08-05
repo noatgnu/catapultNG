@@ -2,7 +2,7 @@ import {ExperimentFile} from "../experiment/experiment-file";
 
 export interface Analysis {
   id: number;
-  analysis_name: string;
+  analysis_path: string;
   experiment: number;
   analysis_type: string;
   created_at: Date;
@@ -19,6 +19,7 @@ export interface Analysis {
   generated_quant: ExperimentFile[];
   config: number;
   total_files: number;
+  analysis_name: string;
 }
 
 export interface AnalysisQuery {

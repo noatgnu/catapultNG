@@ -1,0 +1,83 @@
+<div class="p-5">
+  <h5>Protein Group Report Search</h5>
+  <form [formGroup]="searchForm" class="d-flex flex-row gap-2" (ngSubmit)="search()">
+    <div class="form-floating">
+      <input type="search" class="input-journal form-control" id="searchTerm" formControlName="searchTerm">
+      <label for="searchTerm">Search</label>
+    </div>
+    <div class="form-floating">
+      <select class="input-journal form-select" id="sortBy" formControlName="sortBy">
+        @for (s of sortOptions; track s) {
+          <option [value]="s.value">{{s.label}}</option>
+        }
+      </select>
+      <label for="sortBy">Sort By</label>
+    </div>
+    <div class="form-floating">
+      <select class="input-journal form-select" id="sortDirection" formControlName="sortDirection" style="width:200px">
+        <option value="desc">Desc</option>
+        <option value="asc">Asc</option>
+      </select>
+      <label for="sortDirection">Sort Direction</label>
+    </div>
+    <div class="form-floating">
+      <input type="number" class="input-journal form-control" id="minIntensity" formControlName="minIntensity">
+      <label for="minIntensity">Min Intensity</label>
+    </div>
+    <div class="form-floating">
+      <input type="number" class="input-journal form-control" id="maxIntensity" formControlName="maxIntensity">
+      <label for="maxIntensity">Max Intensity</label>
+    </div>
+    <button type="submit" class="btn"><span class="bi bi-search"></span></button>
+  </form>
+  @if (query) {
+    @if (query.count > 0) {
+      <table class="table table-journal mt-2">
+        <thead>
+        <tr>
+          <th scope="col">
+            Protein Group
+          </th>
+          <th scope="col">
+            Gene Names
+          </th>
+          <th scope="col">
+            Intensity
+          </th>
+          <th scope="col">
+            Analysis
+          </th>
+          <th scope="col">
+            File
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (p of query.results; track p.id) {
+            <tr>
+              <td><span [ngbTooltip]="p.protein_group">{{ p.protein_group }}</span> </td>
+              <td><span [ngbTooltip]="p.gene_names">{{ p.gene_names }}</span></td>
+              <td>{{ p.intensity | number:  ".0-4" }}</td>
+              <td><a href="/#/analysis/manage/{{p.analysis.id}}" target="_blank"><span [ngbTooltip]="p.analysis.analysis_path">{{ p.analysis.analysis_path}}</span></a></td>
+              <td><span [ngbTooltip]="p.file.file_path">{{ p.file.file_path }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <ngb-pagination
+        [collectionSize]="query.count"
+        [pageSize]="pageSize"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        [maxSize]="5"
+        [(page)]="page"
+        (pageChange)="handlePageChange()"
+      >
+      </ngb-pagination>
+    } @else {
+      <div class="alert alert-info mt-2" role="alert">
+        No protein groups found.
+      </div>
+    }
+  }
+</div>

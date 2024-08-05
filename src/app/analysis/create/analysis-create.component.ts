@@ -22,7 +22,7 @@ import {AnalysisType} from "../analysis";
 export class AnalysisCreateComponent implements OnInit{
   @Input() mode: "fromExp" | "searchExp" = "searchExp"
   form = this.fb.group({
-    analysis_name: new FormControl(null, Validators.required),
+    analysis_path: new FormControl(null, Validators.required),
     experiment: new FormControl(0, Validators.required),
     analysis_type: new FormControl("diann-spectral", Validators.required),
     fasta_file: new FormControl(null),
@@ -54,8 +54,8 @@ export class AnalysisCreateComponent implements OnInit{
 
   submit() {
     if (this.form.valid) {
-      if (this.form.value["analysis_name"] && this.selectedExperiment && this.form.value["analysis_type"] && this.form.value["fasta_file"] && this.form.value["spectral_library"]) {
-        this.analysisService.createAnalysis(this.form.value["analysis_name"], this.selectedExperiment.id, this.form.value["analysis_type"], this.form.value["fasta_file"], this.form.value["spectral_library"]).subscribe((data) => {
+      if (this.form.value["analysis_path"] && this.selectedExperiment && this.form.value["analysis_type"] && this.form.value["fasta_file"] && this.form.value["spectral_library"]) {
+        this.analysisService.createAnalysis(this.form.value["analysis_path"], this.selectedExperiment.id, this.form.value["analysis_type"], this.form.value["fasta_file"], this.form.value["spectral_library"]).subscribe((data) => {
           this.modal.close(data)
         })
       }

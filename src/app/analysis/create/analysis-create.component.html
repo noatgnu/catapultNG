@@ -4,8 +4,8 @@
 <div class="modal-body">
   <form [formGroup]="form">
     <div class="form-group">
-      <label for="analysis_name">Analysis Name</label>
-      <input type="text" class="form-control" id="analysis_name" formControlName="analysis_name">
+      <label for="analysis_path">Analysis Path</label>
+      <input type="text" class="form-control" id="analysis_path" formControlName="analysis_path">
     </div>
     @if (mode === "searchExp") {
       <app-experiment-search (selectedExperiment)="handleExperimentSelect($event)"></app-experiment-search>

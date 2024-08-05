@@ -1,0 +1,100 @@
+<h5>DIANN Config Parameters</h5>
+<form [formGroup]="form" class="d-flex flex-column gap-2">
+  @if (!enableColumn) {
+    @for (f of fields; track f) {
+      @if (f.type === "array") {
+        <div class="form-group">
+          <label for="cat-{{f.name}}_input">{{f.name}}</label>
+          <input type="text" class="form-control" id="cat-{{f.name}}_input" formControlName="{{f.name}}_input">
+        </div>
+        <div>
+          <button class="btn btn-outline-primary" (click)="addSearchList(f.name+'_input', f.name)">+</button>
+        </div>
+        <div class="form-floating">
+          <select class="form-select" id="cat-{{f.name}}" formControlName="{{f.name}}" readonly multiple>
+            @for (c of getConfigValue(f.name); track c) {
+              <option [value]="c">{{c}}</option>
+            }
+          </select>
+          <label for="cat-{{f.name}}">{{f.name}}</label>
+        </div>
+      } @else if (f.type === "boolean") {
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="cat-{{f.name}}" formControlName="{{f.name}}">
+          <label class="form-check-label" for="cat-{{f.name}}">{{f.name}}</label>
+        </div>
+      } @else if (f.type === "number") {
+        <div class="form-group">
+          <label class="form-group" for="cat-{{f.name}}">{{f.name}}</label>
+          <input type="number" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+        </div>
+      } @else if (f.type === "string") {
+        <div class="form-group">
+          <label class="form-group" for="cat-{{f.name}}">{{f.name}}</label>
+          <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+        </div>
+      } @else {
+        <div class="form-group">
+          <label class="form-group" for="cat-{{f.name}}">{{f.name}}</label>
+          <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+        </div>
+      }
+    }
+  } @else {
+    <table class="table table-borderless">
+      <thead>
+      <tr>
+        <th scope="col">Enable</th>
+        <th scope="col">Parameter Detail</th>
+      </tr>
+      </thead>
+      <tbody>
+      @for (f of fields; track f) {
+        <tr>
+          <td>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="cat-{{f.name}}_catenable" formControlName="{{f.name}}_catenable">
+              <label class="form-check-label" for="cat-{{f.name}}_catenable">{{f.name}}</label>
+            </div>
+          </td>
+          <td>
+            @if (f.type === "array") {
+              <div class="form-group">
+                <input type="text" class="form-control" id="cat-{{f.name}}_input" formControlName="{{f.name}}_input">
+              </div>
+              <div class="mt-2">
+                <button class="btn btn-outline-primary" (click)="addSearchList(f.name+'_input', f.name)">+</button>
+              </div>
+              <div class="form-floating mt-2">
+                <select class="form-select" id="cat-{{f.name}}" formControlName="{{f.name}}" readonly multiple>
+                  @for (c of getConfigValue(f.name); track c) {
+                    <option [value]="c">{{c}}</option>
+                  }
+                </select>
+                <label for="cat-{{f.name}}">{{f.name}}</label>
+              </div>
+            } @else if (f.type === "boolean") {
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="cat-{{f.name}}" formControlName="{{f.name}}">
+              </div>
+            } @else if (f.type === "number") {
+              <div class="form-group">
+                <input type="number" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+              </div>
+            } @else if (f.type === "string") {
+              <div class="form-group">
+                <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+              </div>
+            } @else {
+              <div class="form-group">
+                <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+              </div>
+            }
+          </td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  }
+
+</form>

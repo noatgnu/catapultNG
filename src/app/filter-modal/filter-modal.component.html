@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    Additional Filter Parameters
+  </h5>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-group">
+      <label for="min_precursor">
+        Minimum Precursor Identified
+      </label>
+      <input type="number" class="form-control" id="min_precursor" formControlName="min_precursor">
+    </div>
+    <div class="form-group">
+      <label for="max_precursor">
+        Maximum Precursor Identified
+      </label>
+      <input type="number" class="form-control" id="max_precursor" formControlName="max_precursor">
+    </div>
+    <div class="form-group">
+      <label for="min_protein">
+        Minimum Protein Identified
+      </label>
+      <input type="number" class="form-control" id="min_protein" formControlName="min_protein">
+    </div>
+    <div class="form-group">
+      <label for="max_protein">
+        Maximum Protein Identified
+      </label>
+      <input type="number" class="form-control" id="max_protein" formControlName="max_protein">
+    </div>
+  </form>
+  <hr>
+  <app-diann-config-input [enableColumn]="true" (updateConfig)="handleDiannConfigUpdate($event)"></app-diann-config-input>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="submit()">Submit</button>
+  <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+</div>

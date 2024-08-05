@@ -21,7 +21,7 @@ import {NgbHighlight, NgbTypeahead} from "@ng-bootstrap/ng-bootstrap";
 })
 export class AnalysisSearchComponent {
   @Input() mode: "typeahead" | "emit" = "typeahead"
-  searchTerm: string = ""
+  @Input() searchTerm: string = ""
 
   searching: boolean = false
   searchFailed: boolean = false
@@ -46,7 +46,7 @@ export class AnalysisSearchComponent {
       tap(() => this.searching = false)
     )
 
-  formatter = (x: Analysis) => x.analysis_name;
+  formatter = (x: Analysis) => x.analysis_path;
 
 
 

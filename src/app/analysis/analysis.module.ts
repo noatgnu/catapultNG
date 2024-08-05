@@ -14,6 +14,11 @@ const routes: Routes = [
     path: 'manage',
     component: AnalysisManageComponent,
     data: {breadcrumbs: ['analysis', 'manage']}
+  },
+  {
+    path: 'manage/:analysisId',
+    component: AnalysisManageComponent,
+    data: {breadcrumbs: ['analysis', 'manage']}
   }
 ]
 

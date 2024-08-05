@@ -53,6 +53,17 @@
                   </div>
                 </div>
               </li>
+              <li class="nav-item">
+                <div ngbDropdown class="d-inline-block">
+                  <button type="button" class="btn btn-dark" id="dataReportButton" ngbDropdownToggle>
+                    <i class="bi bi-book"> Data Report</i>
+                  </button>
+                  <div ngbDropdownMenu aria-labelledby="dataReportButton">
+                    <a class="dropdown-item" routerLink="/data-report/precursor/">Precursor</a>
+                    <a class="dropdown-item" routerLink="/data-report/protein-group/">Protein Group</a>
+                  </div>
+                </div>
+              </li>
               @if (!accounts.loggedIn) {
                 <li class="nav-item">
                   <a class="btn btn-dark" routerLink="/accounts/login"><i class="bi bi-lock"></i> Login</a>
@@ -68,7 +79,7 @@
       </div>
     </nav>
     @if (ready) {
-      <div>
+      <div class="main-content">
         <router-outlet></router-outlet>
       </div>
     }

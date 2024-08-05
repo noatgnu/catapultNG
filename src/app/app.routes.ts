@@ -32,6 +32,10 @@ export const routes: Routes = [
     loadChildren: () => import('./log/log.module').then(m => m.LogModule),
   },
   {
+    path: 'data-report',
+    loadChildren: () => import('./data-report/data-report.module').then(m => m.DataReportModule),
+  },
+  {
     path: 'home',
     loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
   },

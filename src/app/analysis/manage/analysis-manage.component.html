@@ -9,11 +9,13 @@
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-start g-2 flex-wrap text-light">
         <button class="btn btn-sm btn-dark" (click)="openCreateAnalysisModal()">+</button>
         <button class="btn btn-sm btn-dark" (click)="showSelect=!showSelect"><i class="bi bi-folder-check"></i></button>
+        <button class="btn btn-sm btn-dark" (click)="openFilterModal()"><i class="bi bi-filter"></i></button>
         <button class="btn btn-sm btn-dark" (click)="deleteAllSelected()"><i class="bi bi-trash"></i></button>
         <button class="btn btn-sm btn-dark" (click)="previousPage()" [disabled]="!previous"><</button>
         <button class="btn btn-sm btn-dark" (click)="nextPage()" [disabled]="!next">></button>
+        <button class="btn btn-sm btn-dark" (click)="resetFilter()"><i class="bi bi-repeat"></i></button>
       </nav>
-      <app-analysis-search [mode]="'emit'" (searchQuery)="handleAnalysisSearchQuery($event)"></app-analysis-search>
+      <app-analysis-search [searchTerm]="searchTerm" [mode]="'emit'" (searchQuery)="handleAnalysisSearchQuery($event)"></app-analysis-search>
       <div class="analysis-side-nav">
         <div class="list-group d-flex flex-column rounded-0">
           @for (e of analyses; track e) {
@@ -28,9 +30,11 @@
                 </div>
               }
               <div class="flex-grow-1">
-                <p><b>ID:</b> {{e.id}}<br>
-                  <b>Analysis:</b> {{e.analysis_name}}<br>
-                </p>
+                <div>
+                  <b>ID:</b> {{e.id}}<br>
+                  <b>Name:</b> {{e.analysis_name}}<br>
+                  <b>Path:</b> {{e.analysis_path}}
+                </div>
               </div>
 
             </div>
@@ -40,27 +44,50 @@
       </div>
     </div>
     <div class="analysis-main-content">
+      @if (extraParameterService.proteinIdentified.min || extraParameterService.proteinIdentified.max || extraParameterService.precursorIdentified.max || extraParameterService.precursorIdentified.min) {
+        <div class="m-5 small">
+          <b>Current Extra Filter</b>
+          <p>
+            @if (extraParameterService.proteinIdentified.min) {
+              <b>Min Protein Identified:</b> {{extraParameterService.proteinIdentified.min}} <br>
+            }
+            @if (extraParameterService.proteinIdentified.max) {
+              <b>Max Protein Identified:</b> {{extraParameterService.proteinIdentified.max}} <br>
+            }
+            @if (extraParameterService.precursorIdentified.min) {
+              <b>Min Precursor Identified:</b> {{extraParameterService.precursorIdentified.min}} <br>
+            }
+            @if (extraParameterService.precursorIdentified.max) {
+              <b>Max Precursor Identified:</b> {{extraParameterService.precursorIdentified.max}} <br>
+            }
+          </p>
+        </div>
+      }
       @if (clickedAnalysis === -1) {
         <div class="p-5">
           <div class="border-dark border-opacity-25 rounded-3 d-flex "
                style="border-style: dashed">
             <div class="p-5">
               <p>
-                No experiment selected yet.
+                No analysis selected yet.
               </p>
             </div>
           </div>
         </div>
       } @else {
         <div class="p-5">
-          <form [formGroup]="form" class="d-flex flex-column gap-2">
+          <form [formGroup]="form" class="d-flex flex-column gap-2 mb-2">
             <div class="form-group">
               <label for="analysis_name">Analysis Name</label>
-              <input type="text" class="form-control" id="analysis_name" formControlName="analysis_name">
+              <input type="text" class="form-control input-journal" id="analysis_name" formControlName="analysis_name">
+            </div>
+            <div class="form-group">
+              <label for="analysis_path">Analysis Path</label>
+              <input type="text" class="form-control input-journal" readonly id="analysis_path" formControlName="analysis_path">
             </div>
             <div class="form-group">
               <label for="id">Unique ID</label>
-              <input type="number" class="form-control" id="id" formControlName="id" readonly>
+              <input type="number" class="form-control input-journal" id="id" formControlName="id" readonly>
             </div>
             <div class="d-flex gap-2">
               <!--<div class="form-group">
@@ -100,25 +127,31 @@
             </div>
             <div class="form-group">
               <label for="commands">Command Parameters</label>
-              <textarea class="form-control" id="commands" formControlName="commands" readonly></textarea>
+              <textarea class="form-control input-journal" id="commands" formControlName="commands" readonly></textarea>
             </div>
             <div class="form-group">
               <label for="output_folder">Output Folder</label>
-              <input type="text" class="form-control" id="output_folder" formControlName="output_folder">
-              <button class="btn btn-sm btn-outline-primary" (click)="openFileBrowser()">Browse</button>
+              <input type="text" class="form-control input-journal" id="output_folder" formControlName="output_folder">
+              <button class="btn btn-sm btn-outline-primary mt-1" (click)="openFileBrowser()">Browse</button>
             </div>
             <div class="form-group">
-              <b>Start Time:</b> {{form.value.start_time}}
+              <b>Start Time:</b>
+              @if (form.value.start_time) {
+                {{form.value.start_time}}
+              }
             </div>
             <div class="form-group">
-              <b>End Time:</b> {{form.value.end_time}}
+              <b>End Time:</b>
+              @if (form.value.end_time) {
+                {{form.value.end_time}}
+              }
             </div>
             @if (selectedExperiment) {
               @if (!editExperiment) {
                 <div class="form-group">
                   <label><b>Experiment</b></label>
-                  <p>{{selectedExperiment.experiment_name}}</p>
-                  <button class="btn btn-sm btn-outline-danger" (click)="editExperiment=true">Change Experiment</button>
+                  <p><a href="/#/experiment/manage/{{selectedExperiment.id}}">{{selectedExperiment.experiment_name}}</a></p>
+                  <!--<button class="btn btn-sm btn-outline-danger" (click)="editExperiment=true">Change Experiment</button>-->
                 </div>
               } @else {
                 <app-experiment-search [mode]="'typeahead'" (selectedExperiment)="handleExperimentSelect($event)" [experiment]="selectedExperiment"></app-experiment-search>
@@ -134,12 +167,37 @@
               <button class="btn btn-danger" (click)="deleteAnalysis(clickedAnalysis)">Delete</button>
             </div>
           </form>
+          @if (resultSummaries.length> 0) {
+            <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+              <li [ngbNavItem]="'precursor'">
+                <button ngbNavLink>Precursor</button>
+                <ng-template ngbNavContent>
+                  <div class="d-flex justify-content-center mt-2">
+                    <app-bar-chart-result-summary [plotType]="'precursor'" [data]="resultSummaries"></app-bar-chart-result-summary>
+                  </div>
+                  <div>
+                    <app-precursor-report [pageSize]="5" [analysisIds]="[clickedAnalysis]"></app-precursor-report>
+                  </div>
+                </ng-template>
+              </li>
+              <li [ngbNavItem]="'protein'">
+                <button ngbNavLink>Protein</button>
+                <ng-template ngbNavContent>
+                  <div class="d-flex justify-content-center mt-2">
+                    <app-bar-chart-result-summary [plotType]="'protein'" [data]="resultSummaries"></app-bar-chart-result-summary>
+                  </div>
+                  <div>
+                    <app-protein-group-report [pageSize]="5" [analysisIds]="[clickedAnalysis]"></app-protein-group-report>
+                  </div>
+                </ng-template>
+              </li>
+            </ul>
+            <div [ngbNavOutlet]="nav" class="mt-2"></div>
+          }
         </div>
-
       }
-
     </div>
-    <div class="border-start border-1 border-black">
+    <!--<div class="border-start border-1 border-black">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex flex-wrap text-light">
         <div class="container-fluid">
           <div class="navbar-brand">Associated Tasks</div>
@@ -166,6 +224,6 @@
         </div>
       </div>
 
-    </div>
+    </div>-->
   </div>
 </div>

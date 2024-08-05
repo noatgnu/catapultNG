@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {GeneralService} from "../../general.service";
 import {ExperimentService} from "../experiment.service";
@@ -11,6 +11,10 @@ import {forkJoin} from "rxjs";
 import {ExperimentSearchComponent} from "../experiment-search/experiment-search.component";
 import {AnalysisCreateComponent} from "../../analysis/create/analysis-create.component";
 import {ExperimentFile} from "../experiment-file";
+import {ResultSummary} from "../../data-report/result-summary";
+import {
+  BarChartResultSummaryComponent
+} from "../../result-summary/bar-chart-result-summary/bar-chart-result-summary.component";
 
 @Component({
   selector: 'app-experiment-manage',
@@ -19,7 +23,8 @@ import {ExperimentFile} from "../experiment-file";
     NgClass,
     ReactiveFormsModule,
     ExperimentSearchComponent,
-    DatePipe
+    DatePipe,
+    BarChartResultSummaryComponent
   ],
   providers: [ExperimentService],
   templateUrl: './experiment-manage.component.html',
@@ -43,6 +48,20 @@ export class ExperimentManageComponent implements OnInit{
     id: new FormControl()
   })
   associatedFiles: ExperimentFile[] = []
+
+  private _experimentId: number = -1
+
+  @Input() set experimentId(experimentId: number) {
+    this.selectExperiment(experimentId)
+    this._experimentId = experimentId
+  }
+
+  get experimentId(): number {
+    return this._experimentId
+  }
+
+  resultSummaries: ResultSummary[] = []
+
   constructor(private activatedRoute: ActivatedRoute, private generalService: GeneralService, private experimentService: ExperimentService, private fb: FormBuilder, private modal: NgbModal) {
     this.experimentService.getExperiments().subscribe((data: ExperimentQuery) => {
       this.experiments = data.results
@@ -93,6 +112,9 @@ export class ExperimentManageComponent implements OnInit{
           this.associatedFiles = files
           console.log(files)
         })
+      })
+      this.experimentService.getResultSummaries(experiment_id).subscribe((data: ResultSummary[]) => {
+        this.resultSummaries = data
       })
     }
   }

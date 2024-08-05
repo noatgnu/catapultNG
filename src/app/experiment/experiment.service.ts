@@ -4,6 +4,7 @@ import {map, Observable} from "rxjs";
 import {Experiment, ExperimentQuery, VendorChoice} from "./experiment";
 import {environment} from "../../environments/environment";
 import {ExperimentFile} from "./experiment-file";
+import {ResultSummary} from "../data-report/result-summary";
 
 @Injectable({
   providedIn: 'root'
@@ -50,5 +51,9 @@ export class ExperimentService {
 
   getAssociatedFiles(id: number): Observable<ExperimentFile[]> {
     return this.http.get<ExperimentFile[]>(`${this.baseURL}/api/experiments/${id}/get_associated_files`, {observe: "body", responseType: "json"})
+  }
+
+  getResultSummaries(id: number): Observable<ResultSummary[]> {
+    return this.http.get<ResultSummary[]>(`${this.baseURL}/api/experiments/${id}/get_result_summaries`, {observe: "body", responseType: "json"})
   }
 }
