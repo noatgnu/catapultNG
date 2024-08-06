@@ -10,7 +10,13 @@ export class LogService {
   protocol: string = window.location.protocol
   baseURL = environment.baseURL.replace("http://", "https://")
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    if (this.protocol === "http:") {
+      this.baseURL = environment.baseURL.replace("https://", "http://")
+    } else {
+      this.baseURL = environment.baseURL.replace("http://", "https://")
+    }
+  }
 
   getLog(worker_id: number = 0, search: string = "", offset: number = 0, page_size: number = 20) {
     let params: HttpParams = new HttpParams()

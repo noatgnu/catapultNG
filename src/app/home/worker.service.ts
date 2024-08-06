@@ -9,7 +9,13 @@ import {Worker, WorkerQuery} from "./worker";
 export class WorkerService {
   protocol: string = window.location.protocol
   baseURL = environment.baseURL.replace("http://", "https://")
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    if (this.protocol === "http:") {
+      this.baseURL = environment.baseURL.replace("https://", "http://")
+    } else {
+      this.baseURL = environment.baseURL.replace("http://", "https://")
+    }
+  }
 
   getWorkers(url?: string) {
     return this.http.get<WorkerQuery>(url ? url : this.baseURL + "/api/workers")

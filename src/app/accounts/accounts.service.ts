@@ -10,7 +10,13 @@ export class AccountsService {
   loggedIn: boolean = false
   protocol: string = window.location.protocol
   baseURL = environment.baseURL.replace("http://", "https://")
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    if (this.protocol === "http:") {
+      this.baseURL = environment.baseURL.replace("https://", "http://")
+    } else {
+      this.baseURL = environment.baseURL.replace("http://", "https://")
+    }
+  }
 
   login(username: string, password: string) {
     this.loggedIn = false

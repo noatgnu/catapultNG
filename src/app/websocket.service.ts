@@ -14,7 +14,13 @@ export class WebsocketService {
   protocol: string = window.location.protocol
   baseURL = environment.baseURL.replace("http://", "https://").replace("http", "ws")
 
-  constructor() { }
+  constructor() {
+    if (this.protocol === "http:") {
+      this.baseURL = environment.baseURL.replace("https://", "http://").replace("http", "ws")
+    } else {
+      this.baseURL = environment.baseURL.replace("http://", "https://").replace("http", "ws")
+    }
+  }
 
   connectNotification(): WebSocketSubject<any> {
     this.connectingNotificationChannel = true

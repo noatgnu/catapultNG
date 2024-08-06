@@ -13,7 +13,13 @@ export class GeneralService {
 
   breadCrumbsSubject: BehaviorSubject<{ paths: string[], active: string }> = new BehaviorSubject<{paths: string[], active: string}>({paths: [], active: ""});
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    if (this.protocol === "http:") {
+      this.baseURL = environment.baseURL.replace("https://", "http://")
+    } else {
+      this.baseURL = environment.baseURL.replace("http://", "https://")
+    }
+  }
 
 
   setBreadcrumbs(paths: string[], active: string) {

@@ -10,9 +10,16 @@ import {Subject} from "rxjs";
 })
 export class DataReportService {
   baseURL = environment.baseURL.replace("http://", "https://")
+  protocol: string = window.location.protocol
   refreshReportSubject: Subject<boolean> = new Subject<boolean>()
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    if (this.protocol === "http:") {
+      this.baseURL = environment.baseURL.replace("https://", "http://")
+    } else {
+      this.baseURL = environment.baseURL.replace("http://", "https://")
+    }
+  }
 
   getProteinGroupReport(search: string|undefined|null, limit: number = 10, offset: number = 0, sort: string = "intensity", sortDirection: string = "desc", minIntensity: number|null, maxIntensity: number|null, analysisIds: number[] = [], minPrecursor: number|null, maxPrecursor: number|null, minProtein: number|null, maxProtein: number|null) {
     let params = new HttpParams()

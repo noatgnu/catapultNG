@@ -13,7 +13,13 @@ export class AnalysisService {
   protocol: string = window.location.protocol
   baseURL = environment.baseURL.replace("http://", "https://")
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    if (this.protocol === "http:") {
+      this.baseURL = environment.baseURL.replace("https://", "http://")
+    } else {
+      this.baseURL = environment.baseURL.replace("http://", "https://")
+    }
+  }
 
   getAnalyses(url?: string, minPrecursor: number|null = null, maxPrecursor: number|null = null, minProtein: number|null = null, maxProtein: number|null = null, configSearchObject: any|null = null): Observable<AnalysisQuery> {
     if (url) {
