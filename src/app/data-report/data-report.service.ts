@@ -9,7 +9,7 @@ import {Subject} from "rxjs";
   providedIn: 'root'
 })
 export class DataReportService {
-  baseURL = environment.baseURL
+  baseURL = environment.baseURL.replace("http://", "https://")
   refreshReportSubject: Subject<boolean> = new Subject<boolean>()
 
   constructor(private http: HttpClient) { }

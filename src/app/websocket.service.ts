@@ -12,7 +12,7 @@ export class WebsocketService {
   connectingNotificationChannel: boolean = false
   connectingAnalysisLogChannel: boolean = false
   protocol: string = window.location.protocol
-  baseURL = environment.baseURL.replace("http", this.protocol.slice(0, -1)).replace("http", "ws")
+  baseURL = environment.baseURL.replace("http://", "https://").replace("http", "ws")
 
   constructor() { }
 

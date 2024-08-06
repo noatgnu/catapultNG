@@ -8,7 +8,7 @@ import {Worker, WorkerQuery} from "./worker";
 })
 export class WorkerService {
   protocol: string = window.location.protocol
-  baseURL = environment.baseURL.replace("http", this.protocol.slice(0, -1))
+  baseURL = environment.baseURL.replace("http://", "https://")
   constructor(private http: HttpClient) { }
 
   getWorkers(url?: string) {

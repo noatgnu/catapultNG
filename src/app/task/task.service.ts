@@ -11,7 +11,7 @@ import {Analysis} from "../analysis/analysis";
 })
 export class TaskService {
   protocol: string = window.location.protocol
-  baseURL = environment.baseURL.replace("http", this.protocol.slice(0, -1))
+  baseURL = environment.baseURL.replace("http://", "https://")
 
   constructor(private http: HttpClient) { }
 
