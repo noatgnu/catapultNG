@@ -1,34 +1,30 @@
 import { Component } from '@angular/core';
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
-import {FormBuilder, FormControl, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {Diann} from "../diann";
+import {DiannConfigInputComponent} from "../../diann-config-input/diann-config-input.component";
+import {ConfigToDiannCMD} from "../catapult-run-config";
+import yaml from "js-yaml";
 
 @Component({
   selector: 'app-diann-modal',
   standalone: true,
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DiannConfigInputComponent
   ],
   templateUrl: './diann-modal.component.html',
   styleUrl: './diann-modal.component.scss'
 })
 export class DiannModalComponent {
 
-
   form = this.fb.group({
-    commands: new FormControl(""),
-    "N-term M excision": new FormControl(true),
-    "C carbamidomethylation": new FormControl(true),
-    "Oxidation M": new FormControl(false),
-    "Acetyl N-term": new FormControl(false),
-    "Phospho STY": new FormControl(false),
-    "K-GG": new FormControl(false),
-    "FASTA digest for library-free search / library generation": new FormControl(false),
-    "Deep learning-based spectra, RTs and IMs prediction": new FormControl(false),
+    diannCMD: [""]
   })
+  currentConfig: any = {}
 
-  constructor(private fb: FormBuilder , private modal: NgbActiveModal) {
-    this.createDiann()
+  constructor(private modal: NgbActiveModal, private fb: FormBuilder) {
+
   }
 
 
@@ -40,27 +36,36 @@ export class DiannModalComponent {
     this.modal.dismiss()
   }
 
-  createDiann() {
-    let diann = new Diann()
-    if (this.form.controls["N-term M excision"].value) {
-      diann.addNTermMethionineExcision()
+  handleConfigChange(value: any) {
+    this.currentConfig = value
+    const payload: any = {}
+    for (const key in value) {
+      if (!key.endsWith("_catenable") && !key.endsWith("_input")) {
+        payload[key] = value[key]
+      }
     }
-    if (this.form.controls["C carbamidomethylation"].value) {
-      diann.addCCarbamidomethyl()
+    const result = ConfigToDiannCMD(payload)
+    this.form.controls["diannCMD"].setValue(result)
+  }
+  export() {
+    const payload: any = {}
+    for (const key in this.currentConfig) {
+      if (!key.endsWith("_catenable") && !key.endsWith("_input")) {
+        // @ts-ignore
+        payload[key] = this.currentConfig[key]
+      }
     }
-    if (this.form.controls["Oxidation M"].value) {
-      diann.addOxidationM()
-    }
-    if (this.form.controls["Acetyl N-term"].value) {
-      diann.addAcetylN()
-    }
-    if (this.form.controls["Phospho STY"].value) {
-      diann.addPhosphoSTY()
-    }
-    if (this.form.controls["K-GG"].value) {
-      diann.addKGG()
-    }
-    console.log(diann.convertAttributesToCommandParams())
-    this.form.controls["commands"].setValue(diann.convertAttributesToCommandParams().join(" "))
+    const yamlString = yaml.dump(payload);
+
+    const blob = new Blob([yamlString], { type: 'application/x-yaml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'config.yaml';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
   }
 }

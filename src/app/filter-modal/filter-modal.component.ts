@@ -47,7 +47,7 @@ export class FilterModalComponent {
         console.log(v)
         // @ts-ignore
         this.diannConfig[key as keyof CatapultRunConfigContent] = v
-
+        this.extraParameterService.diannConfigEnableMap[key] = true
       }
     })
     console.log(this.diannConfig)

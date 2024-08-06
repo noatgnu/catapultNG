@@ -14,6 +14,7 @@ export class ExtraParameterService {
     max: null
   }
   diannConfig: CatapultRunConfigContent = new CatapultRunConfigContent()
+  diannConfigEnableMap: { [key: string]: boolean } = {}
 
   constructor() {
     this.resetDiannConfig()

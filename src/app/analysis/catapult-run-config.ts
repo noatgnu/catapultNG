@@ -17,6 +17,8 @@ export interface CatapultRunConfigQuery {
   results: CatapultRunConfig[];
 }
 
+export const DiannContentBlank = {'cat_file_auto': 'boolean', 'cat_ready': 'boolean', 'cat_total_files': 'number', 'channel_run_norm': 'boolean', 'channel_spec_norm': 'boolean', 'channels': 'list', 'clear_mods': 'boolean', 'compact_report': 'boolean', 'cont_quant_exclude': 'boolean', 'convert': 'boolean', 'cut': 'str', 'decoy_channel': 'str', 'decoys_preserve_spectrum': 'boolean', 'diann_path': 'str', 'dir': 'str', 'direct_quant': 'boolean', 'dl_no_im': 'boolean', 'dl_no_rt': 'boolean', 'duplicate_proteins': 'boolean', 'exact_fdr': 'boolean', 'export_quant': 'boolean', 'ext': 'str', 'f': 'list', 'fasta': 'list', 'fasta_filter': 'str', 'fasta_search': 'boolean', 'fixed_mod': 'list', 'force_swissprot': 'boolean', 'foreign_decoys': 'boolean', 'full_unimod': 'boolean', 'gen_fr_restriction': 'boolean', 'gen_spec_lib': 'boolean', 'global_mass_cal': 'boolean', 'global_norm': 'boolean', 'high_acc': 'boolean', 'ids_to_names': 'boolean', 'il_eq': 'boolean', 'im_window': 'str', 'im_window_factor': 'str', 'individual_mass_acc': 'boolean', 'individual_reports': 'boolean', 'individual_windows': 'boolean', 'int_removal': 'str', 'lib': 'list', 'lib_fixed_mod': 'list', 'library_headers': 'list', 'mass_acc': 'number', 'mass_acc_cal': 'str', 'mass_acc_ms1': 'number', 'matrices': 'boolean', 'matrix_ch_qvalue': 'str', 'matrix_qvalue': 'str', 'matrix_spec_q': 'boolean', 'matrix_tr_qvalue': 'str', 'max_fr': 'str', 'max_fr_mz': 'number', 'max_pep_len': 'number', 'max_pr_charge': 'number', 'max_pr_mz': 'number', 'mbr_fix_settings': 'boolean', 'met_excision': 'boolean', 'min_fr': 'str', 'min_fr_mz': 'number', 'min_peak': 'str', 'min_pep_len': 'number', 'min_pr_charge': 'number', 'min_pr_mz': 'number', 'missed_cleavages': 'number', 'mod': 'list', 'mod_no_scoring': 'str', 'mod_only': 'boolean', 'no_calibration': 'boolean', 'no_cut_after_mod': 'str', 'no_decoy_channel': 'boolean', 'no_fr_selection': 'boolean', 'no_im_window': 'boolean', 'no_isotopes': 'boolean', 'no_lib_filter': 'boolean', 'no_main_report': 'boolean', 'no_maxlfq': 'boolean', 'no_norm': 'boolean', 'no_peptidoforms': 'boolean', 'no_prot_inf': 'boolean', 'no_quant_files': 'boolean', 'no_rt_window': 'boolean', 'no_stats': 'boolean', 'no_swissprot': 'boolean', 'original_mods': 'boolean', 'out': 'str', 'out_lib': 'str', 'out_lib_copy': 'boolean', 'out_measured_rt': 'boolean', 'peak_translation': 'boolean', 'peptidoforms': 'boolean', 'pg_level': 'str', 'pr_filter': 'str', 'predict_n_frag': 'str', 'predictor': 'boolean', 'prefix': 'str', 'ptm_qvalues': 'boolean', 'quant_acc': 'str', 'quant_fr': 'str', 'quant_no_ms1': 'boolean', 'quant_sel_runs': 'str', 'quant_train_runs': 'str', 'quick_mass_acc': 'boolean', 'qvalue': 'number', 'reanalyse': 'boolean', 'reannotate': 'boolean', 'ref': 'str', 'regular_swath': 'boolean', 'relaxed_prot_inf': 'boolean', 'report_lib_info': 'boolean', 'restrict_fr': 'boolean', 'scanning_swath': 'boolean', 'semi': 'boolean', 'skip_unknown_mods': 'boolean', 'smart_profiling': 'boolean', 'species_genes': 'boolean', 'species_ids': 'boolean', 'sptxt_acc': 'str', 'tag_to_ids': 'str', 'temp': 'str', 'threads': 'number', 'tims_min_int': 'str', 'tims_ms1_cycle': 'str', 'tims_scan': 'boolean', 'tims_skip_errors': 'boolean', 'unimod': 'list', 'use_quant': 'boolean', 'var_mod': 'list', 'var_mods': 'number', 'verbose': 'number', 'window': 'str', 'xic': 'str', 'xic_theoretical_fr': 'boolean'}
+
 export class CatapultRunConfigContent {
   cat_file_auto: boolean;
   cat_ready: boolean;
@@ -316,4 +318,88 @@ export class CatapultRunConfigContent {
       }
     }
   }
+}
+
+export function ConfigToDiannCMD(config: CatapultRunConfigContent): string {
+  const commands: string[] = [config["diann_path"]];
+
+  for (const [key, value] of Object.entries(config)) {
+    if (key !== "diann_path" && key !== "ready") {
+      const cmdKey = key.replace(/_/g, "-");
+
+      if (value !== null) {
+        if (cmdKey === "channels") {
+          if (Array.isArray(value)) {
+            commands.push(`--${cmdKey}`);
+            const val = value.join("; ");
+            // check if there is space in the value, if so, wrap it in quotes
+            if (val.includes(" ")) {
+              commands.push(`"${val}"`);
+            } else {
+              commands.push(val);
+            }
+          } else if (typeof value === "string") {
+            commands.push(`--${cmdKey}`);
+            if (value.includes(" ")) {
+              commands.push(`"${value}"`);
+            } else {
+              commands.push(value);
+            }
+          }
+        } else if (typeof value === "boolean") {
+          if (value) {
+            commands.push(`--${cmdKey}`);
+          }
+        } else if (Array.isArray(value)) {
+          if (cmdKey === "unimod") {
+            for (const item of value) {
+              commands.push(`--unimod${String(item)}`);
+            }
+          } else if (cmdKey === "temp") {
+            commands.push(`--temp`);
+            const val = String(value);
+            if (val.includes(" ")) {
+              commands.push(`"${val}"`);
+            } else {
+              commands.push(val);
+            }
+          } else if (cmdKey === "f") {
+            for (const item of value) {
+              commands.push(`--${cmdKey}`);
+              if (item.includes(" ")) {
+                commands.push(`"${item}"`);
+              } else {
+                commands.push(item);
+              }
+            }
+          } else if (cmdKey === "out") {
+            commands.push(`--out`);
+            if (value.includes(" ")) {
+              commands.push(`"${value}"`);
+            } else {
+              commands.push(String(value));
+            }
+          } else {
+            for (const item of value) {
+              commands.push(`--${cmdKey}`);
+              if (item.includes(" ")) {
+                commands.push(`"${item}"`);
+              } else {
+                commands.push(String(item));
+              }
+            }
+          }
+        } else {
+          commands.push(`--${cmdKey}`);
+          if (String(value).includes(" ")) {
+            commands.push(`"${value}"`);
+          } else {
+            commands.push(String(value));
+          }
+        }
+      }
+    }
+  }
+
+  return commands.join(" ");
 }
