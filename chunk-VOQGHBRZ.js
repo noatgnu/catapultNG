@@ -1,0 +1,1 @@
+import{Hb as m,M as r,R as i,sb as e}from"./chunk-VG74EQIO.js";var s=[],a=(()=>{let t=class t{};t.\u0275fac=function(n){return new(n||t)},t.\u0275mod=i({type:t}),t.\u0275inj=r({imports:[e,m.forRoot(s)]});let o=t;return o})();export{a as TaskModule};
