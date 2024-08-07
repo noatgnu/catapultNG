@@ -15,7 +15,9 @@ import yaml from 'js-yaml';
 })
 export class DiannConfigInputComponent {
   config: CatapultRunConfigContent = new CatapultRunConfigContent()
-
+  configSearchForm: FormGroup = this.fb.group({
+    searchTerm: new FormControl('')
+  })
   form : FormGroup;
   fields:{name: string, type: string}[] = []
   @Output() updateConfig: EventEmitter<any> = new EventEmitter<any>()
@@ -54,6 +56,11 @@ export class DiannConfigInputComponent {
   }
 
   constructor(private fb: FormBuilder, private extraParameterService: ExtraParameterService) {
+    this.configSearchForm.controls["searchTerm"].valueChanges.subscribe((value) => {
+      if (value) {
+
+      }
+    })
     this.fields = Object.keys(this.config).filter((key: string) => !key.startsWith("cat_")).map((key: string) => {
       const value = this.config[key as keyof CatapultRunConfigContent];
       return { name: key, type: Array.isArray(value) ? 'array' : typeof value };

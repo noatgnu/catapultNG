@@ -1,47 +1,99 @@
 <h5>DIANN Config Parameters</h5>
+<form [formGroup]="configSearchForm">
+  <div class="form-floating">
+    <input type="search" class="form-control" id="config-searchTerm" formControlName="searchTerm">
+    <label for="config-searchTerm">Config Search Term</label>
+  </div>
+</form>
+<hr>
 <form [formGroup]="form" class="d-flex flex-column gap-2">
   @if (!enableColumn) {
     @for (f of fields; track f) {
-      @if (f.type === "array") {
-        <div class="form-group">
-          <label class="form-group" for="cat-{{f.name}}_input">{{f.name}}</label>
-          <input type="text" class="form-control" id="cat-{{f.name}}_input" formControlName="{{f.name}}_input">
-        </div>
-        <div class="mt-2">
-          <button class="btn btn-outline-primary" (click)="addSearchList(f.name+'_input', f.name)">+</button>
-        </div>
-        @if (form.value[f.name]) {
-          @if (form.value[f.name].length > 0) {
-            <ul>
-              @for (c of form.value[f.name]; track c; let i = $index) {
-                <li>{{c}} <span class="bi bi-trash" (click)="removeFromList(i, f.name)"></span></li>
+      @if (configSearchForm.value['searchTerm'] && configSearchForm.value['searchTerm'] !== "") {
+        @if (f.name.toLowerCase().replace(' ', "_").includes(configSearchForm.value['searchTerm'].toLowerCase())) {
+          @if (f.type === "array") {
+            <div class="form-group">
+              <label class="form-group" for="cat-{{f.name}}_input">{{f.name}}</label>
+              <input type="text" class="form-control" id="cat-{{f.name}}_input" formControlName="{{f.name}}_input">
+            </div>
+            <div class="mt-2">
+              <button class="btn btn-outline-primary" (click)="addSearchList(f.name+'_input', f.name)">+</button>
+            </div>
+            @if (form.value[f.name]) {
+              @if (form.value[f.name].length > 0) {
+                <ul>
+                  @for (c of form.value[f.name]; track c; let i = $index) {
+                    <li>{{c}} <span class="bi bi-trash" (click)="removeFromList(i, f.name)"></span></li>
+                  }
+                </ul>
               }
-            </ul>
+            }
+          } @else if (f.type === "boolean") {
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="cat-{{f.name}}" formControlName="{{f.name}}">
+              <label class="form-check-label" for="cat-{{f.name}}">{{f.name}}</label>
+            </div>
+          } @else if (f.type === "number") {
+            <div class="form-group">
+              <label class="form-group" for="cat-{{f.name}}">{{f.name}}</label>
+              <input type="number" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+            </div>
+          } @else if (f.type === "string") {
+            <div class="form-group">
+              <label class="form-group" for="cat-{{f.name}}">{{f.name}}</label>
+              <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+            </div>
+          } @else {
+            <div class="form-group">
+              <label class="form-group" for="cat-{{f.name}}">{{f.name}}</label>
+              <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+            </div>
           }
         }
-      } @else if (f.type === "boolean") {
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="cat-{{f.name}}" formControlName="{{f.name}}">
-          <label class="form-check-label" for="cat-{{f.name}}">{{f.name}}</label>
-        </div>
-      } @else if (f.type === "number") {
-        <div class="form-group">
-          <label class="form-group" for="cat-{{f.name}}">{{f.name}}</label>
-          <input type="number" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
-        </div>
-      } @else if (f.type === "string") {
-        <div class="form-group">
-          <label class="form-group" for="cat-{{f.name}}">{{f.name}}</label>
-          <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
-        </div>
       } @else {
-        <div class="form-group">
-          <label class="form-group" for="cat-{{f.name}}">{{f.name}}</label>
-          <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
-        </div>
+        @if (f.type === "array") {
+          <div class="form-group">
+            <label class="form-group" for="cat-{{f.name}}_input">{{f.name}}</label>
+            <input type="text" class="form-control" id="cat-{{f.name}}_input" formControlName="{{f.name}}_input">
+          </div>
+          <div class="mt-2">
+            <button class="btn btn-outline-primary" (click)="addSearchList(f.name+'_input', f.name)">+</button>
+          </div>
+          @if (form.value[f.name]) {
+            @if (form.value[f.name].length > 0) {
+              <ul>
+                @for (c of form.value[f.name]; track c; let i = $index) {
+                  <li>{{c}} <span class="bi bi-trash" (click)="removeFromList(i, f.name)"></span></li>
+                }
+              </ul>
+            }
+          }
+        } @else if (f.type === "boolean") {
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="cat-{{f.name}}" formControlName="{{f.name}}">
+            <label class="form-check-label" for="cat-{{f.name}}">{{f.name}}</label>
+          </div>
+        } @else if (f.type === "number") {
+          <div class="form-group">
+            <label class="form-group" for="cat-{{f.name}}">{{f.name}}</label>
+            <input type="number" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+          </div>
+        } @else if (f.type === "string") {
+          <div class="form-group">
+            <label class="form-group" for="cat-{{f.name}}">{{f.name}}</label>
+            <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+          </div>
+        } @else {
+          <div class="form-group">
+            <label class="form-group" for="cat-{{f.name}}">{{f.name}}</label>
+            <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+          </div>
+        }
       }
+
     }
   } @else {
+
     <table class="table table-borderless">
       <thead>
       <tr>
@@ -51,49 +103,98 @@
       </thead>
       <tbody>
       @for (f of fields; track f) {
-        <tr>
-          <td>
-            <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="cat-{{f.name}}_catenable" formControlName="{{f.name}}_catenable">
-              <label class="form-check-label" for="cat-{{f.name}}_catenable">{{f.name}}</label>
-            </div>
-          </td>
-          <td>
-            @if (f.type === "array") {
-              <div class="form-group">
-                <input type="text" class="form-control" id="cat-{{f.name}}_input" formControlName="{{f.name}}_input">
-              </div>
-              <div class="mt-2">
-                <button class="btn btn-outline-primary" (click)="addSearchList(f.name+'_input', f.name)">+</button>
-              </div>
-              @if (form.value[f.name]) {
-                @if (form.value[f.name].length > 0) {
-                  <ul>
-                    @for (c of form.value[f.name]; track c; let i = $index) {
-                      <li>{{c}} <span class="bi bi-trash" (click)="removeFromList(i, f.name)"></span></li>
+        @if (configSearchForm.value['searchTerm'] && configSearchForm.value['searchTerm'] !== "") {
+          @if (f.name.toLowerCase().replace(' ', "_").includes(configSearchForm.value['searchTerm'].toLowerCase())) {
+            <tr>
+              <td>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="cat-{{f.name}}_catenable" formControlName="{{f.name}}_catenable">
+                  <label class="form-check-label" for="cat-{{f.name}}_catenable">{{f.name}}</label>
+                </div>
+              </td>
+              <td>
+                @if (f.type === "array") {
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="cat-{{f.name}}_input" formControlName="{{f.name}}_input">
+                  </div>
+                  <div class="mt-2">
+                    <button class="btn btn-outline-primary" (click)="addSearchList(f.name+'_input', f.name)">+</button>
+                  </div>
+                  @if (form.value[f.name]) {
+                    @if (form.value[f.name].length > 0) {
+                      <ul>
+                        @for (c of form.value[f.name]; track c; let i = $index) {
+                          <li>{{c}} <span class="bi bi-trash" (click)="removeFromList(i, f.name)"></span></li>
+                        }
+                      </ul>
                     }
-                  </ul>
+                  }
+                } @else if (f.type === "boolean") {
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="cat-{{f.name}}" formControlName="{{f.name}}">
+                  </div>
+                } @else if (f.type === "number") {
+                  <div class="form-group">
+                    <input type="number" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+                  </div>
+                } @else if (f.type === "string") {
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+                  </div>
+                } @else {
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+                  </div>
                 }
-              }
-            } @else if (f.type === "boolean") {
+              </td>
+            </tr>
+          }
+        } @else {
+          <tr>
+            <td>
               <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="cat-{{f.name}}" formControlName="{{f.name}}">
+                <input type="checkbox" class="form-check-input" id="cat-{{f.name}}_catenable" formControlName="{{f.name}}_catenable">
+                <label class="form-check-label" for="cat-{{f.name}}_catenable">{{f.name}}</label>
               </div>
-            } @else if (f.type === "number") {
-              <div class="form-group">
-                <input type="number" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
-              </div>
-            } @else if (f.type === "string") {
-              <div class="form-group">
-                <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
-              </div>
-            } @else {
-              <div class="form-group">
-                <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
-              </div>
-            }
-          </td>
-        </tr>
+            </td>
+            <td>
+              @if (f.type === "array") {
+                <div class="form-group">
+                  <input type="text" class="form-control" id="cat-{{f.name}}_input" formControlName="{{f.name}}_input">
+                </div>
+                <div class="mt-2">
+                  <button class="btn btn-outline-primary" (click)="addSearchList(f.name+'_input', f.name)">+</button>
+                </div>
+                @if (form.value[f.name]) {
+                  @if (form.value[f.name].length > 0) {
+                    <ul>
+                      @for (c of form.value[f.name]; track c; let i = $index) {
+                        <li>{{c}} <span class="bi bi-trash" (click)="removeFromList(i, f.name)"></span></li>
+                      }
+                    </ul>
+                  }
+                }
+              } @else if (f.type === "boolean") {
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="cat-{{f.name}}" formControlName="{{f.name}}">
+                </div>
+              } @else if (f.type === "number") {
+                <div class="form-group">
+                  <input type="number" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+                </div>
+              } @else if (f.type === "string") {
+                <div class="form-group">
+                  <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+                </div>
+              } @else {
+                <div class="form-group">
+                  <input type="text" class="form-control" id="cat-{{f.name}}" formControlName="{{f.name}}">
+                </div>
+              }
+            </td>
+          </tr>
+        }
+
       }
       </tbody>
     </table>
